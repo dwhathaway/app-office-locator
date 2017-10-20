@@ -1,14 +1,14 @@
-#Official Locator Hack
+# Official Locator Hack
 
 In this hack, we're going to show how to spin up your own Office Locator app in just a few steps.  After completing this hack, you'll be have a fully working Office Locator app that you can populate with your own office locations.
 
-###Step 1: Clone the Repo
+### Step 1: Clone the Repo
 
 Make a local directory, and then clone the repo from [https://github.com/dwhathaway/app-office-locator](https://github.com/dwhathaway/app-office-locator)
 
 ```git clone https://github.com/dwhathaway/app-office-locator.git```
 
-###Step 2: Create a new Mobile App Service
+### Step 2: Create a new Mobile App Service
 
 - Browse to [https://portal.azure.com](https://portal.azure.com)
 - New > Mobile App
@@ -17,7 +17,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 ![Create Mobile App](img/create-app-service.png)
 
-###Step 3: Create a SQL Database
+### Step 3: Create a SQL Database
 
 > __Note:__ For this exercise, we'll create a new SQL Server instance but you can also coose an existing instance if you prefer.
 
@@ -36,7 +36,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 - Choose "Pricing tier", and select "Basic", then click "Apply"
 - Click "Create" to create the SQL Database
 
-###Step 4: Set up your Data connection
+### Step 4: Set up your Data connection
 
 - In your Mobile App Service, select the "Data connections" blade
 - Click "Add" to add a new Data Connection
@@ -52,7 +52,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 ![Data connection added](img/data-connection-complete.png)
 
-###Step 3: Set up your Easy Tables
+### Step 3: Set up your Easy Tables
 
 - While still in your app, click on the "Easy tables" blade
 
@@ -68,7 +68,7 @@ You've already set up your data connection, so all you need to do is check the c
 
 This will take a minute or two to complete.  Once it's done, you'll be returned back to the Easy Tables blade, where you can set up your Location and Feedback tables
 
-###Step 4: Upload the CSV file to populate locations
+### Step 4: Upload the CSV file to populate locations
 
 - On the Easy Tables blade, click the "Add from CSV" button
 - Browse Click the "Select a file" field, and browse to the `my-office-locator.csv` file in the `data` folder of the repo that you cloned in __Step 1__
@@ -81,7 +81,7 @@ This will initialize a new table, and populate it with the locations that you up
 
 Next, we'll change the code in the app to pull from your App Service.
 
-###Step 5: Run the app
+### Step 5: Run the app
 
 - Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 1__
 - Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file. 
@@ -101,7 +101,7 @@ _Example:_
 
 - Compile and run either the iOS or Android sample, which every you have a device/simulator already configured for debugging
 
-#Congratulations!
+# Congratulations!
 
 You've complete this hack!  For bonus points, you can try the following:
 
