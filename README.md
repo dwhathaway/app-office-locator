@@ -44,4 +44,4 @@ Please find links here to hacks that you can do to learn more about Xamarin and 
 The MIT License (MIT)
 Copyright (c) 2017 David Hathaway
 
-See latest License file [here](License.md).
+See latest License file [here](LICENSE.md).
