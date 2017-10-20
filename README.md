@@ -34,6 +34,11 @@ Built in C# and powered by ([Xamarin](http://www.xamarin.com)) from inside of Vi
 * [Xamarin.Forms.Maps](https://www.nuget.org/packages/Xamarin.Forms.Maps)
 * [Visual Studio Mobile Center](https://www.nuget.org/profiles/mobile-center/)
 
+### Hacks
+
+Please find links here to hacks that you can do to learn more about Xamarin and Azure for mobile apps
+
+[Easy Tables Hack](hacks/easy-table-hack.md)
 
 ## License
 The MIT License (MIT)
