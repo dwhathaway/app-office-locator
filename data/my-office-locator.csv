@@ -1,0 +1,6 @@
+LocationCode,Country,PhoneNumber,ZipCode,State,City,StreetAddress,LocationHint,Name,Image,SundayClose,SundayOpen,SaturdayClose,SaturdayOpen,FridayClose,FridayOpen,ThursdayClose,ThursdayOpen,WednesdayClose,WednesdayOpen,TuesdayClose,TuesdayOpen,MondayClose,MondayOpen
+BOS,United States,855-926-2746,2116,MA,Boston,"2 Park Plaza, Suite 700",Park Plaza & Boylston St.,Xamarin Inc.,http://www.refractored.com/images/Boston.png,6pm,12pm,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am
+SF,United States,855-926-2746,94111,CA,San Francisco,394 Pacific Ave. 4th Floor,Sansome & Pacific,Xamarin HQ,http://www.refractored.com/images/SF.png,6pm,12pm,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am
+Argentina,Argentina,855-926-2746,C1035AAD CABA,,Buenos Aires,Av. Pres. Roque Saenz Pena 875,Visual Studio to the Max!,Xamarin Inc. Argentina,http://refractored.com/images/Argentina.png,6pm,12pm,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am
+London,United Kingdom,855-926-2746,W1W 8RL,,London,10 Margaret Street,South of Regent's Park,Xamarin Inc. London,http://refractored.com/images/London.png,6pm,12pm,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am
+Denmark,Denmark,588-926-2746,8200,,Aarhus,Abogade 15,Home of the Test Cloud,Xamarin Denmark APS,http://refractored.com/images/Denmark.png,6pm,12pm,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am,8pm,9am

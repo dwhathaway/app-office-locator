@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+	 x:Class="OfficeLocator.LocationsPage"
+	Title="{Binding Title}"
+	IsBusy="{Binding IsBusy}">
+	<ContentPage.Content>
+		<StackLayout>
+			<StackLayout HorizontalOptions="Center" Orientation="Horizontal" Spacing="10" Padding="10" IsVisible="{Binding IsBusy}">
+				<ActivityIndicator  HorizontalOptions="Center"
+								   IsRunning="{Binding IsBusy}"
+								   IsVisible="{Binding IsBusy}"/>
+			    <Label HorizontalOptions="Center"
+			    	 VerticalOptions="Center" 
+			    	 Text="Loading..."/>
+	   		</StackLayout>
+      <SearchBar x:Name="searchBar" IsVisible="{Binding IsBusyRev}" Placeholder="Search Offices"/>
+			<ListView 
+				x:Name="LocationList"
+				ItemsSource="{Binding LocationsGrouped}"
+				IsGroupingEnabled="True"
+            	GroupDisplayBinding="{Binding Key}"
+            	HasUnevenRows="True">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						 <ViewCell>
+				            <Grid>
+                      <Grid.Padding>
+                        <OnPlatform x:TypeArguments="Thickness">
+                          <OnPlatform.iOS>
+                            10,5,10,5
+                          </OnPlatform.iOS>
+                          <OnPlatform.Android>
+                            10,5,10,5
+                          </OnPlatform.Android>
+                          <OnPlatform.WinPhone>
+                            20,25,20,25
+                          </OnPlatform.WinPhone>
+                        </OnPlatform>
+                      </Grid.Padding>
+				              <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				              </Grid.ColumnDefinitions>
+				              <Image VerticalOptions="Center"
+                                            Aspect="AspectFit">
+				                <Image.WidthRequest>
+				                  <OnPlatform x:TypeArguments="x:Double">
+				                    <OnPlatform.iOS>50</OnPlatform.iOS>
+				                    <OnPlatform.Android>50 </OnPlatform.Android>
+				                    <OnPlatform.WinPhone>70</OnPlatform.WinPhone>
+				                  </OnPlatform>
+				                 </Image.WidthRequest>
+				              <Image.HeightRequest>
+				                  <OnPlatform x:TypeArguments="x:Double">
+				                    <OnPlatform.iOS>50</OnPlatform.iOS>
+				                    <OnPlatform.Android>50</OnPlatform.Android>
+				                    <OnPlatform.WinPhone>70</OnPlatform.WinPhone>
+				                  </OnPlatform>
+				                 </Image.HeightRequest>
+				                 <Image.Source>
+									<UriImageSource Uri="{Binding ImageUri}" CacheValidity="14" CachingEnabled="true"/>
+								</Image.Source>
+				              </Image>
+				              <StackLayout Grid.Column="1" 
+				                           Padding="8" 
+				                           Spacing="4"
+				                           VerticalOptions="Center">
+				                <Label Text="{Binding Name}" FontSize="13"  TextColor="#2C3E50" LineBreakMode="WordWrap"/>
+				              </StackLayout>
+				            </Grid>
+				          </ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>
