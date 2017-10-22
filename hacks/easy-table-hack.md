@@ -1,4 +1,4 @@
-# Official Locator Hack
+# Office Locator Hack
 
 In this hack, we're going to show how to spin up your own Office Locator app in just a few steps.  After completing this hack, you'll be have a fully working Office Locator app that you can populate with your own office locations.
 
