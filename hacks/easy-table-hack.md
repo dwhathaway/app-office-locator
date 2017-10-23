@@ -84,8 +84,7 @@ Next, we'll change the code in the app to pull from your App Service.
 ### Step 5: Run the app
 
 - Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 1__
-- Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file. 
-- Switch back over to the Azure Portal, and go to the  
+- Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file.
 - Delete the `#error` pragma on Line #38
 - Browse to your app in the Azure Portal, and copy the URL form the Overview page.  To do so, click the "Overview" blade, and then hover over the URL to show the 'page' icon.  Click on that icon to copy your URL
 
