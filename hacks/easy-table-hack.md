@@ -19,7 +19,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 ### Step 3: Create a SQL Database
 
-> __Note:__ For this exercise, we'll create a new SQL Server instance but you can also coose an existing instance if you prefer.
+> __Note:__ For this exercise, we'll create a new SQL Server instance but you can also choose an existing instance if you prefer.
 
 - Once again, browse to [https://portal.azure.com](https://portal.azure.com)
 - Click "SQL Databases" from the menu on the left of the page, then click the "+ Add" button
