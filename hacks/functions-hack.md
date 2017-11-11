@@ -1,10 +1,10 @@
-# Thumbnail Hack
+# Azure Functions (Thumbnail) Hack
 
 In this hack, we're going to upload images to Azure Blob Storage and trigger an Azure Function to create thumbnails using Microsoft Cognitive Services.  The URI for new thumbnails will be stored in the Easy Table you created in the Easy Table Hack. After completing this hack, you will be able to host your images in the cloud and have them automatically resized for use in the Office Locator App.
 
 ### Step 0: Prerequisite
 
-Complete the [Easy Table Hack](https://dwhathaway.github.io/app-office-locator/hacks/easy-table-hack.html)
+Complete the [Easy Table Hack](easy-table-hack.md)
 
 
 ### Step 1: Create a new Azure Function App
@@ -195,4 +195,4 @@ public class Location
 
 # Congratulations!
 
-You've complete this hack!  
+You've complete this hack!  Why don't you try your hand at the [Visual Studio Mobile Center](mobile-center-hack.md) hack now?
