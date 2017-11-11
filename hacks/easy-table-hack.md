@@ -1,4 +1,4 @@
-# Office Locator Hack
+# Easy Tables Hack
 
 In this hack, we're going to show how to spin up your own Office Locator app in just a few steps.  After completing this hack, you'll be have a fully working Office Locator app that you can populate with your own office locations.
 
@@ -105,5 +105,6 @@ _Example:_
 You've complete this hack!  For bonus points, you can try the following:
 
 - Create an additional Easy Table to collect Feedback
+- Use [Functions and Cognitive Services](functions-hack.md) to create thumbnails for each of your locations
 - Update the CSV file with your own locations
-- Configure your app in Mobile Center
+- Configure your app in [Visual Studio Mobile Center](mobile-center-hack.md)

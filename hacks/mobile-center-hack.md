@@ -1,4 +1,6 @@
-#Step 1: Create a GitHub Account
+# Visual Studio Mobile Center Hack
+
+### Step 1: Create a GitHub Account
 
 If you already have a GitHub account, you can jump directly to Step 2 below.  Otherwise, please follow these steps to create your account:
 
@@ -21,7 +23,7 @@ If you already have a GitHub account, you can jump directly to Step 2 below.  Ot
 
 Congrats! You're now ready to move on to Step 2: Forking the repo
 
-#Step 2: Forking the "app-office-locator" repo
+### Step 2: Forking the "app-office-locator" repo
 
 - Navigate to [http://github.com/dwhathaway/app-office-locator](http://github.com/dwhathaway/app-office-locator)
 
@@ -31,7 +33,7 @@ Congrats! You're now ready to move on to Step 2: Forking the repo
 
 ![Create new account](img/mobile-center-hack/2-2-repo-forking.png)
 
-#Step 3: Create your Azure Account
+### Step 3: Create your Azure Account
 
 There are several different ways to create an Azure account.  A few examples are:
 
@@ -45,7 +47,7 @@ If you do not already have an account/subscription, you will be prompted to crea
 
 > __Note:__ You will need to enter in a credit card to create your account.  This card will _only_ be used to pay for charges that exceeed your monthly allocation (e.g. $150/mo for Enterprise users).
 
-# Step 4: Create a new Mobile App Service
+### Step 4: Create a new Mobile App Service
 
 - Browse to [https://portal.azure.com](https://portal.azure.com)
 - New > Mobile App
@@ -54,7 +56,7 @@ If you do not already have an account/subscription, you will be prompted to crea
 
 ![Create Mobile App](img/create-app-service.png)
 
-# Step 5: Create a SQL Database
+### Step 5: Create a SQL Database
 
 > __Note:__ For this exercise, we'll create a new SQL Server instance but you can also choose an existing instance if you prefer.
 
@@ -73,7 +75,7 @@ If you do not already have an account/subscription, you will be prompted to crea
 - Choose "Pricing tier", and select "Basic", then click "Apply"
 - Click "Create" to create the SQL Database
 
-# Step 6: Set up your Data connection
+### Step 6: Set up your Data connection
 
 - In your Mobile App Service, select the "Data connections" blade
 - Click "Add" to add a new Data Connection
@@ -89,7 +91,7 @@ If you do not already have an account/subscription, you will be prompted to crea
 
 ![Data connection added](img/data-connection-complete.png)
 
-# Step 7: Set up your Easy Tables
+### Step 7: Set up your Easy Tables
 
 - While still in your app, click on the "Easy tables" blade
 
@@ -105,7 +107,7 @@ You've already set up your data connection, so all you need to do is check the c
 
 This will take a minute or two to complete.  Once it's done, you'll be returned back to the Easy Tables blade, where you can set up your Location and Feedback tables
 
-# Step 8: Upload the CSV file to populate locations
+### Step 8: Upload the CSV file to populate locations
 
 - On the Easy Tables blade, click the "Add from CSV" button
 - Browse Click the "Select a file" field, and browse to the `my-office-locator.csv` file in the `data` folder of the repo that you cloned in __Step 1__
@@ -119,7 +121,7 @@ This will initialize a new table, and populate it with the locations that you up
 Next, we'll change the code in the app to pull from your App Service.
 
 
-#Step 9: Update your code in GitHub with the App Service URL
+### Step 9: Update your code in GitHub with the App Service URL
 
 - Browse to your GitHub repo, and then select 
 
@@ -142,7 +144,7 @@ After both code changes, your code should look like this:
 > __Note:__ For this exercise, we are commiting your API key to source control.  In general, we recommend using services like [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) to securely store your API keys, and integrate them into your code during your build.
 
 
-#Step 10: Create your Mobile Center Account
+### Step 10: Create your Mobile Center Account
 
 In this step, we're not going to sign into Mobile Center using our Github credentials, and set up our builds. Since you are already signed in to GitHub, we can simply authorize Mobile Center to access your GitHub repositories using the following steps.
 
@@ -154,7 +156,7 @@ In this step, we're not going to sign into Mobile Center using our Github creden
 
 ![Search Results](img/mobile-center-hack/6-2-mc-gh-auth.png)
 
-#Step 11: Create and App in Mobile Center
+### Step 11: Create and App in Mobile Center
 
 - In the top right corner of Mobile Center, click the "Add new" button, and select "Add new app"
 
@@ -168,7 +170,7 @@ In this step, we're not going to sign into Mobile Center using our Github creden
 
 Once created, Mobile Center will automatically navigate you to your newly created app
 
-#Step 12: Set up a Build
+### Step 12: Set up a Build
 
 - Click on the "Build" service from the left hand menu
 
@@ -199,19 +201,14 @@ Mobile Center will now perform it's magic, and connect up to your repo. Once thi
 
 ![Search Results](img/mobile-center-hack/8-11-build-settings.png)
 
-> ###Keystore Settings [download keystore](mobilecenterdevdays.keystore?raw=true)
-> 1. __Keystore password:__ keystore-password
-> 2. __Keystore alias:__ alias
-> 3. __Key password:__ key-password
-
 - Click "Save & Build"
 
 ![Search Results](img/mobile-center-hack/8-12-save-build.png)
 
-Mobile center will now go ahead and build your app, and create a signed APK file.  Go ahead, grab a cup of coffee, this will only take a few minutes, but you've got time.
+Mobile center will now go ahead and build your app, and create an APK file.  Go ahead, grab a cup of coffee, this will only take a few minutes, but you've got time.
 
 
-#Step 13: Distribute your app
+### Step 13: Distribute your app
 
 Awesome, we're back.  Now that we've built an app, we can go ahead and distribute it
 
@@ -233,6 +230,6 @@ Awesome, we're back.  Now that we've built an app, we can go ahead and distribut
 
 Once the distribution is complete, everyone in the distribution list will receive an e-mail letting them know that they can download/install the release.  Alternatively, you can browse to [https://install.mobile.azure.com](https://install.mobile.azure.com) from your mobile device (Safari on iOS, Chrome on Android) to view available releases.
 
-#Congratulations!
+### Congratulations!
 
 You've not built, and distributed your first app using Visual Studio Mobile Center.  For more information on how to ship 5-start apps with Visual Studio Mobile Center, please visit [https://docs.mobile.azure.com](https://docs.mobile.azure.com).  There you can find information on the Crash, Test, and Analytics capabilities of Visual Studio Mobile Center, as well as how to integrate into additional services like Application Insights, or Visual Studio Team Services.
