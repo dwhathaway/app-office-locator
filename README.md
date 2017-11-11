@@ -39,6 +39,7 @@ Built in C# and powered by ([Xamarin](http://www.xamarin.com)) from inside of Vi
 Please find links here to hacks that you can do to learn more about Xamarin and Azure for mobile apps
 
 [Easy Tables Hack](hacks/easy-table-hack.md)
+[Thumbnail Hack](hacks/Thumbnail Hack.md)
 
 ## License
 The MIT License (MIT)
