@@ -135,7 +135,15 @@ app-office-locator > src > Office-Locator > Services.cs
 
 After both code changes, your code should look like this:
 
-![Search Results](img/mobile-center-hack/4-7-final-code.png)
+````
+
+public AzureDataStore()
+{
+    // This is a sample read-only azure site for demo
+    // Follow the readme.md in the GitHub repo on how to setup your own.
+    MobileService = new MobileServiceClient("[your endpoint here]");
+}
+````
 
 - Scroll to the bottom and enter in any comment into the "Commit changes" field set, and click "Commit changes" button to commit your key to source control
 
