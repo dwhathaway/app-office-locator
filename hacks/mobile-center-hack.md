@@ -1,4 +1,4 @@
-# Visual Studio Mobile Center Hack
+# Visual Studio App Center Hack
 
 ### Step 1: Create a GitHub Account
 
@@ -152,21 +152,21 @@ public AzureDataStore()
 > __Note:__ For this exercise, we are commiting your API key to source control.  In general, we recommend using services like [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) to securely store your API keys, and integrate them into your code during your build.
 
 
-### Step 10: Create your Mobile Center Account
+### Step 10: Create your App Center Account
 
-In this step, we're not going to sign into Mobile Center using our Github credentials, and set up our builds. Since you are already signed in to GitHub, we can simply authorize Mobile Center to access your GitHub repositories using the following steps.
+In this step, we're not going to sign into App Center using our Github credentials, and set up our builds. Since you are already signed in to GitHub, we can simply authorize App Center to access your GitHub repositories using the following steps.
 
-- Browse to [https://mobile.azure.com](https://mobile.azure.com), and click on "Connect with GitHub"
+- Browse to [https://appcenter.ms/apps](https://appcenter.ms/apps), and click on "Connect with GitHub"
 
 ![Search Results](img/mobile-center-hack/6-1-create-mc-account.png)
 
-- Click the "Authorize MobileCenter" button
+- Click the "Authorize App Center" button
 
 ![Search Results](img/mobile-center-hack/6-2-mc-gh-auth.png)
 
-### Step 11: Create and App in Mobile Center
+### Step 11: Create and App in App Center
 
-- In the top right corner of Mobile Center, click the "Add new" button, and select "Add new app"
+- In the top right corner of App Center, click the "Add new" button, and select "Add new app"
 
 ![Search Results](img/mobile-center-hack/7-1-add-app.png)
 
@@ -176,7 +176,7 @@ In this step, we're not going to sign into Mobile Center using our Github creden
 
 - Click "Add new app" in the bottom right corner
 
-Once created, Mobile Center will automatically navigate you to your newly created app
+Once created, App Center will automatically navigate you to your newly created app
 
 ### Step 12: Set up a Build
 
@@ -184,7 +184,7 @@ Once created, Mobile Center will automatically navigate you to your newly create
 
 ![Search Results](img/mobile-center-hack/8-1-build.png)
 
-Here, you will connect Mobile Center to your GitHub repository that you created at the beginning of this exercise
+Here, you will connect App Center to your GitHub repository that you created at the beginning of this exercise
 
 - Select "Github"
 
@@ -195,7 +195,7 @@ Here, you will connect Mobile Center to your GitHub repository that you created 
 
 ![Search Results](img/mobile-center-hack/8-3-pick-repo.png)
 
-Mobile Center will now perform it's magic, and connect up to your repo. Once this is done, we can set up our build.
+App Center will now perform it's magic, and connect up to your repo. Once this is done, we can set up our build.
 
 - Click on the "Master" branch
 
@@ -213,7 +213,7 @@ Mobile Center will now perform it's magic, and connect up to your repo. Once thi
 
 ![Search Results](img/mobile-center-hack/8-12-save-build.png)
 
-Mobile center will now go ahead and build your app, and create an APK file.  Go ahead, grab a cup of coffee, this will only take a few minutes, but you've got time.
+App Center will now go ahead and build your app, and create an APK file.  Go ahead, grab a cup of coffee, this will only take a few minutes, but you've got time.
 
 
 ### Step 13: Distribute your app
@@ -236,8 +236,8 @@ Awesome, we're back.  Now that we've built an app, we can go ahead and distribut
 
 ![Search Results](img/mobile-center-hack/9-4-click-distribute.png)
 
-Once the distribution is complete, everyone in the distribution list will receive an e-mail letting them know that they can download/install the release.  Alternatively, you can browse to [https://install.mobile.azure.com](https://install.mobile.azure.com) from your mobile device (Safari on iOS, Chrome on Android) to view available releases.
+Once the distribution is complete, everyone in the distribution list will receive an e-mail letting them know that they can download/install the release.  Alternatively, you can browse to [https://install.appcenter.ms/apps](https://install.appcenter.ms/apps) from your mobile device (Safari on iOS, Chrome on Android) to view available releases.
 
 ### Congratulations!
 
-You've not built, and distributed your first app using Visual Studio Mobile Center.  For more information on how to ship 5-start apps with Visual Studio Mobile Center, please visit [https://docs.mobile.azure.com](https://docs.mobile.azure.com).  There you can find information on the Crash, Test, and Analytics capabilities of Visual Studio Mobile Center, as well as how to integrate into additional services like Application Insights, or Visual Studio Team Services.
+You've not built, and distributed your first app using Visual Studio App Center.  For more information on how to ship 5-start apps with Visual Studio App Center, please visit [https://docs.microsoft.com/en-us/appcenter/](https://docs.microsoft.com/en-us/appcenter/).  There you can find information on the Crash, Test, and Analytics capabilities of Visual Studio App Center, as well as how to integrate into additional services like Application Insights, or Visual Studio Team Services.
