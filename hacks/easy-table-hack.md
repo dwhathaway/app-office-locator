@@ -2,11 +2,29 @@
 
 In this hack, we're going to show how to spin up your own Office Locator app in just a few steps.  After completing this hack, you'll be have a fully working Office Locator app that you can populate with your own office locations.
 
-### Step 1: Clone the Repo
+### Step 0: Make sure you have Visual Studio and the Xamarin workloads installed
+
+- Windows Installation: [https://developer.xamarin.com/guides/cross-platform/getting_started/installation/windows/](https://developer.xamarin.com/guides/cross-platform/getting_started/installation/windows/)
+- Mac Installation: [https://docs.microsoft.com/en-us/visualstudio/mac/installation](https://docs.microsoft.com/en-us/visualstudio/mac/installation)
+
+### Step 1: Make sure you have Android SDK 8.0 or later installed
+
+Follow these instructions to open the Android SDK Manager and install 8.0 or later: [https://developer.xamarin.com/guides/android/getting_started/installation/android-sdk/](https://developer.xamarin.com/guides/android/getting_started/installation/android-sdk/)
+
+### Step 2: Clone the Repo
 
 Make a local directory, and then clone the repo from [https://github.com/dwhathaway/app-office-locator](https://github.com/dwhathaway/app-office-locator)
 
 ```git clone https://github.com/dwhathaway/app-office-locator.git```
+
+### Step 3: Increase Android Heap Size
+
+- Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 2__
+- Open the project properties on your Android project.
+- Choose the Android Options page.  
+- Scroll to the bottom of the page, and click "Advanced"
+- Enter "1G" into the "Java Max Heap Size" input.  
+- Save all settings and return to your project.
 
 ### Step 2: Create a new Mobile App Service
 
@@ -83,7 +101,6 @@ Next, we'll change the code in the app to pull from your App Service.
 
 ### Step 5: Run the app
 
-- Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 1__
 - Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file.
 - Delete the `#error` pragma on Line #38
 - Browse to your app in the Azure Portal, and copy the URL form the Overview page.  To do so, click the "Overview" blade, and then hover over the URL to show the 'page' icon.  Click on that icon to copy your URL
