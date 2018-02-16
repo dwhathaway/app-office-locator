@@ -36,10 +36,11 @@ Built in C# and powered by ([Xamarin](http://www.xamarin.com)) from inside of Vi
 
 ### Hacks
 
-Please find links here to hacks that you can do to learn more about Xamarin and Azure for mobile apps
+Please find links here to hacks that you can do to learn more about Xamarin, Azure, and Visual Studio Mobile Center
 
-[Easy Tables Hack](hacks/easy-table-hack.md)
-[Thumbnail Hack](hacks/Thumbnail Hack.md)
+* [Azure Easy Tables Hack](hacks/easy-table-hack.md)
+* [Azure Functions Hack](hacks/functions-hack.md)
+* [Visual Studio App Center Hack](hacks/mobile-center-hack.md)
 
 ## License
 The MIT License (MIT)

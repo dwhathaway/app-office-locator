@@ -1,14 +1,34 @@
-# Office Locator Hack
+# Easy Tables Hack
 
 In this hack, we're going to show how to spin up your own Office Locator app in just a few steps.  After completing this hack, you'll be have a fully working Office Locator app that you can populate with your own office locations.
 
-### Step 1: Clone the Repo
+### Step 0: Make sure you have Visual Studio and the Xamarin workloads installed
+
+- Windows Installation: [https://developer.xamarin.com/guides/cross-platform/getting_started/installation/windows/](https://developer.xamarin.com/guides/cross-platform/getting_started/installation/windows/)
+- Mac Installation: [https://docs.microsoft.com/en-us/visualstudio/mac/installation](https://docs.microsoft.com/en-us/visualstudio/mac/installation)
+
+### Step 1: Make sure you have Android SDK 8.0 or later installed
+
+Follow these instructions to open the Android SDK Manager and install 8.0 or later: [https://developer.xamarin.com/guides/android/getting_started/installation/android-sdk/](https://developer.xamarin.com/guides/android/getting_started/installation/android-sdk/)
+
+### Step 2: Clone the Repo
 
 Make a local directory, and then clone the repo from [https://github.com/dwhathaway/app-office-locator](https://github.com/dwhathaway/app-office-locator)
 
 ```git clone https://github.com/dwhathaway/app-office-locator.git```
 
-### Step 2: Create a new Mobile App Service
+### Step 3: Increase Android Heap Size
+
+- Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 2__
+- Open the project properties on your Android project.
+- Choose the Android Options page.  
+- Scroll to the bottom of the page, and click "Advanced"
+- Enter "1G" into the "Java Max Heap Size" input.  
+- Save all settings and return to your project.
+
+![Heap Size](img/heap-size.png)
+
+### Step 4: Create a new Mobile App Service
 
 - Browse to [https://portal.azure.com](https://portal.azure.com)
 - New > Mobile App
@@ -17,7 +37,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 ![Create Mobile App](img/create-app-service.png)
 
-### Step 3: Create a SQL Database
+### Step 5: Create a SQL Database
 
 > __Note:__ For this exercise, we'll create a new SQL Server instance but you can also choose an existing instance if you prefer.
 
@@ -36,7 +56,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 - Choose "Pricing tier", and select "Basic", then click "Apply"
 - Click "Create" to create the SQL Database
 
-### Step 4: Set up your Data connection
+### Step 6: Set up your Data connection
 
 - In your Mobile App Service, select the "Data connections" blade
 - Click "Add" to add a new Data Connection
@@ -52,7 +72,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 ![Data connection added](img/data-connection-complete.png)
 
-### Step 3: Set up your Easy Tables
+### Step 7: Set up your Easy Tables
 
 - While still in your app, click on the "Easy tables" blade
 
@@ -68,7 +88,7 @@ You've already set up your data connection, so all you need to do is check the c
 
 This will take a minute or two to complete.  Once it's done, you'll be returned back to the Easy Tables blade, where you can set up your Location and Feedback tables
 
-### Step 4: Upload the CSV file to populate locations
+### Step 8: Upload the CSV file to populate locations
 
 - On the Easy Tables blade, click the "Add from CSV" button
 - Browse Click the "Select a file" field, and browse to the `my-office-locator.csv` file in the `data` folder of the repo that you cloned in __Step 1__
@@ -81,22 +101,19 @@ This will initialize a new table, and populate it with the locations that you up
 
 Next, we'll change the code in the app to pull from your App Service.
 
-### Step 5: Run the app
+### Step 9: Run the app
 
-- Launch Visual Studio, and open up the `Office-Locator.sln` file from the `/src` folder of the repo that you cloned in __Step 1__
 - Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file.
 - Delete the `#error` pragma on Line #38
 - Browse to your app in the Azure Portal, and copy the URL form the Overview page.  To do so, click the "Overview" blade, and then hover over the URL to show the 'page' icon.  Click on that icon to copy your URL
 
 ![Copy endpoint URL](img/copy-endpoint-url.png)
 
-- Switch back to your open Visual Studio window, and paste the URL that you copied into the `MobileServiceClient()` constructor
-
-```MobileService = new MobileServiceClient("[your endpoint here]");```
+- Switch back to your open Visual Studio window, and paste the URL that you copied into the `var appUrl =` line
 
 _Example:_
 
-```MobileService = new MobileServiceClient("http://my-office-locator.azurewebsites.net");```
+```var appUrl = "http://my-office-locator.azurewebsites.net";```
 
 - Compile and run either the iOS or Android sample, which every you have a device/simulator already configured for debugging
 
@@ -105,5 +122,6 @@ _Example:_
 You've complete this hack!  For bonus points, you can try the following:
 
 - Create an additional Easy Table to collect Feedback
+- Use [Functions and Cognitive Services](functions-hack.md) to create thumbnails for each of your locations
 - Update the CSV file with your own locations
-- Configure your app in Mobile Center
+- Configure your app in [Visual Studio App Center](mobile-center-hack.md)
