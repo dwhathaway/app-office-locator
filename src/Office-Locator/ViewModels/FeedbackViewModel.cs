@@ -1,9 +1,12 @@
 ﻿using System;
-using Xamarin.Forms;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using OfficeLocator.Model;
+using System.Threading.Tasks;
+
 using Microsoft.AppCenter.Analytics;
+
+using OfficeLocator.Model;
+
+using Xamarin.Forms;
 
 namespace OfficeLocator
 {
@@ -26,7 +29,7 @@ namespace OfficeLocator
         public FeedbackViewModel(Page page, Location loc) : base(page)
         {
             location = loc;
-            dataStore = DependencyService.Get<AzureDataStore>();
+            dataStore = AzureDataStore.Instance;
             Title = "Leave Feedback";
             LocationName = location.Name;
         }
@@ -103,7 +106,7 @@ namespace OfficeLocator
 
             Message = "Submitting feedback...";
             IsBusy = true;
-            saveFeedbackCommand.ChangeCanExecute();
+
             try
             {
                 await dataStore.AddFeedbackAsync(new Feedback
@@ -130,7 +133,6 @@ namespace OfficeLocator
             finally
             {
                 IsBusy = false;
-                saveFeedbackCommand.ChangeCanExecute();
             }
 
             await page.Navigation.PopAsync();

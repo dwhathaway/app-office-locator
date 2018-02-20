@@ -154,8 +154,8 @@ namespace OfficeLocator
 
                 if (!CrossConnectivity.Current.IsConnected)
                     return;
-
-                await MobileService.SyncContext.PushAsync().ConfigureAwait(false);
+                
+                await feedbackTable.PullAsync("allFeedback", feedbackTable.CreateQuery()).ConfigureAwait(false);
                 Settings.NeedSyncFeedback = false;
             }
             catch (Exception ex)

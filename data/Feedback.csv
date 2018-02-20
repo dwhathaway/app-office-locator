@@ -1,0 +1,2 @@
+Text,FeedbackDate,VisitDate,Rating,ServiceType,Name,PhoneNumber,RequiresCall,LocationName
+Sample Text,0001-01-01T00:00:00,0001-01-01T00:00:00,1,1,Test Name,123-456-7890,FALSE,XamarinHQ

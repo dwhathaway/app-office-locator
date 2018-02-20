@@ -11,19 +11,17 @@ namespace OfficeLocator
 {
     public partial class FeedbackPage : ContentPage
     {
-        readonly FeedbackViewModel viewModel;
-        readonly ToolbarItem butSubmitFeedBack;
-
         public FeedbackPage(Location location)
         {
             InitializeComponent();
 
             Analytics.TrackEvent("Feedback - " + location.Name);
 
-            BindingContext = viewModel = new FeedbackViewModel(this, location);
+            var viewModel = new FeedbackViewModel(this, location);
+            BindingContext = viewModel;
 
-            butSubmitFeedBack = new ToolbarItem { Text = "Submit" };
-            butSubmitFeedBack.Command = viewModel.SaveFeedbackCommand;
+            var butSubmitFeedBack = new ToolbarItem { Text = "Submit" };
+            butSubmitFeedBack.SetBinding(ToolbarItem.CommandProperty, nameof(FeedbackViewModel.SaveFeedbackCommand));
 
             ToolbarItems.Add(butSubmitFeedBack);
         }

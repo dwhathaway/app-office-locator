@@ -25,7 +25,6 @@ namespace OfficeLocator
         public string Saturday { get { return string.Format("{0} - {1}", Office.SaturdayOpen, Office.SaturdayClose); } }
         public string Sunday { get { return string.Format("{0} - {1}", Office.SundayOpen, Office.SundayClose); } }
 
-
         public string Address1 { get { return Office.StreetAddress; } }
         public string Address2 { get { return string.Format("{0}, {1} {2}", Office.City, Office.State, Office.ZipCode); } }
 

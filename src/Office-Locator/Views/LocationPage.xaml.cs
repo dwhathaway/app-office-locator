@@ -34,7 +34,7 @@ namespace OfficeLocator
 
             ButtonLeaveFeedback.Clicked += HandleButtonLeaveFeedbackClicked;
 
-            var position = new Position(viewModel.Office.Latitude, viewModel.Office.Longitude); // Latitude, Longitude
+            var position = new Position(viewModel.Office.Latitude, viewModel.Office.Longitude);
             var pin = new Pin
             {
                 Type = PinType.Place,
@@ -57,9 +57,9 @@ namespace OfficeLocator
             ButtonLeaveFeedback.Clicked -= HandleButtonLeaveFeedbackClicked;
         }
 
-        void HandleButtonLeaveFeedbackClicked(object sender, System.EventArgs e)
+        async void HandleButtonLeaveFeedbackClicked(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new FeedbackPage(location));
+            await Navigation.PushAsync(new FeedbackPage(location));
         }
     }
 }
