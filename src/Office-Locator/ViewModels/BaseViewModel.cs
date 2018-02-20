@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 
 namespace OfficeLocator
 {
@@ -11,6 +10,7 @@ namespace OfficeLocator
         string title = string.Empty;
         string subTitle = string.Empty;
         bool isBusy;
+		bool canLoadMore = true;
         string icon;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -61,7 +61,6 @@ namespace OfficeLocator
             set { SetProperty(ref isBusy, value, onChanged: () => OnPropertyChanged(nameof(IsBusyRev))); }
         }
 
-        private bool canLoadMore = true;
         /// <summary>
         /// Gets or sets if we can load more.
         /// </summary>
@@ -90,10 +89,7 @@ namespace OfficeLocator
 
         void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged == null)
-                return;
-
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

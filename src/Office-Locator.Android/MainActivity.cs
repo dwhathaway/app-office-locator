@@ -6,10 +6,6 @@ using Android.OS;
 
 using ImageCircle.Forms.Plugin.Droid;
 
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-
 namespace OfficeLocator.Droid
 {
     [Activity(Label = "Xamarin Office Locator", Icon = "@drawable/ic_launcher", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
