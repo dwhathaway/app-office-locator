@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using UIKit;
 using Foundation;
-using UIKit;
-using ImageCircle.Forms.Plugin.iOS;
-using OfficeLocator;
 
-using Microsoft.Azure.Mobile;
-using Microsoft.Azure.Mobile.Analytics;
-using Microsoft.Azure.Mobile.Crashes;
+using ImageCircle.Forms.Plugin.iOS;
+
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace OfficeLocator.iOS
 {
-	[Register ("AppDelegate")]
+    [Register (nameof(AppDelegate))]
 	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
         string mobileCenterKey = "";
@@ -37,7 +33,7 @@ namespace OfficeLocator.iOS
 
             if (!string.IsNullOrEmpty(mobileCenterKey))
             { 
-                MobileCenter.Start(mobileCenterKey,
+                AppCenter.Start(mobileCenterKey,
                        typeof(Analytics), typeof(Crashes));
             }
             
