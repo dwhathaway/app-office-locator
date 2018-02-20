@@ -34,7 +34,8 @@ namespace OfficeLocator
             SearchBar.TextChanged += HandleSearchBarTextChanged;
             SearchBar.SearchButtonPressed += HandleSearchBarSearchButtonPressed;
 
-            LocationList.BeginRefresh();
+            if (viewModel.Locations.Count <= 0)
+                LocationList.BeginRefresh();
         }
 
         protected override void OnDisappearing()
