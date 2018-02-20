@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="OfficeLocator.Pages.LocationsPage"
+    xmlns:local="clr-namespace:OfficeLocator.Views;assembly=OfficeLocator"
+    Title="{Binding Title}" 
+    IsBusy="{Binding IsBusy}">
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar x:Name="searchBar" IsVisible="{Binding IsBusyRev}" Placeholder="Search Offices" BackgroundColor="#1C2B43">
+                <SearchBar.TextColor>
+                    <OnPlatform x:TypeArguments="Color" Android="#FFFFFF"></OnPlatform>
+                </SearchBar.TextColor>
+            </SearchBar>
+            <!--<StackLayout HorizontalOptions="Center" Orientation="Horizontal" Spacing="10" Padding="10" IsVisible="{Binding IsBusy}">
+                <ActivityIndicator HorizontalOptions="Center" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Loading..." />
+            </StackLayout>-->
+            <ListView x:Name="LocationList" ItemsSource="{Binding LocationsGrouped}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding Key}" HasUnevenRows="True" SeparatorVisibility="None" 
+                IsPullToRefreshEnabled="True"
+                RefreshCommand="{Binding GetLocationsCommand}"
+                IsRefreshing="{Binding IsBusy}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <local:LocationCell />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
