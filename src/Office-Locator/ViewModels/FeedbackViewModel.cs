@@ -97,7 +97,7 @@ namespace OfficeLocator
 
             if (string.IsNullOrWhiteSpace(Text))
             {
-                await page.DisplayAlert("Enter Feedback", "Please enter some feedback for our team.", "OK");
+                await page.DisplayAlert("Enter Feedback", "Please enter some feedback for our team.", "OK").ConfigureAwait(false);;
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace OfficeLocator
             {
                 await dataStore.AddFeedbackAsync(new Feedback
                 {
-                    Text = this.Text,
+                    Text = Text,
                     FeedbackDate = DateTime.UtcNow,
                     VisitDate = Date,
                     Rating = Rating,

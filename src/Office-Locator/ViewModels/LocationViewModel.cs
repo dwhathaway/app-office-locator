@@ -52,7 +52,7 @@ namespace OfficeLocator
             {
                 if (!string.IsNullOrEmpty(Office.PhoneNumber))
                 {
-                    if (await page.DisplayAlert("Call?", "Call " + Office.PhoneNumber + "?", "Call", "Cancel"))
+                    if (await page.DisplayAlert("Call?", "Call " + Office.PhoneNumber + "?", "Call", "Cancel").ConfigureAwait(false))
                     {
                         phoneCallTask.MakePhoneCall(Office.PhoneNumber);
                     }

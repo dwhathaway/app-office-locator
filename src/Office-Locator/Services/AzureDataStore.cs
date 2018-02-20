@@ -48,7 +48,7 @@ namespace OfficeLocator
             var location = new MobileServiceSQLiteStore(Path.Combine(MobileServiceClient.DefaultDatabasePath, path));
             location.DefineTable<Location>();
             location.DefineTable<Feedback>();
-            await MobileService.SyncContext.InitializeAsync(location, new MobileServiceSyncHandler());
+            await MobileService.SyncContext.InitializeAsync(location, new MobileServiceSyncHandler()).ConfigureAwait(false);
 
             locationTable = MobileService.GetSyncTable<Location>();
             feedbackTable = MobileService.GetSyncTable<Feedback>();
@@ -58,72 +58,72 @@ namespace OfficeLocator
 
         public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await feedbackTable.InsertAsync(feedback);
-            await SyncFeedbacksAsync();
+            await feedbackTable.InsertAsync(feedback).ConfigureAwait(false);
+            await SyncFeedbacksAsync().ConfigureAwait(false);
             return feedback;
         }
 
         public async Task<IEnumerable<Feedback>> GetFeedbackAsync()
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await feedbackTable.PullAsync("allFeedbacks", feedbackTable.CreateQuery());
+            await feedbackTable.PullAsync("allFeedbacks", feedbackTable.CreateQuery()).ConfigureAwait(false);
 
-            return await feedbackTable.ToEnumerableAsync();
+            return await feedbackTable.ToEnumerableAsync().ConfigureAwait(false);
         }
 
         public async Task<bool> RemoveFeedbackAsync(Feedback feedback)
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await feedbackTable.DeleteAsync(feedback);
-            await SyncFeedbacksAsync();
+            await feedbackTable.DeleteAsync(feedback).ConfigureAwait(false);
+            await SyncFeedbacksAsync().ConfigureAwait(false);
 
             return true;
         }
 
         public async Task<Location> AddLocationAsync(Location location)
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await locationTable.InsertAsync(location);
-            await SyncLocationsAsync();
-            await MobileService.SyncContext.PushAsync();
+            await locationTable.InsertAsync(location).ConfigureAwait(false);
+            await SyncLocationsAsync().ConfigureAwait(false);
+            await MobileService.SyncContext.PushAsync().ConfigureAwait(false);
 
             return location;
         }
 
         public async Task<bool> RemoveLocationAsync(Location location)
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await locationTable.DeleteAsync(location);
-            await SyncLocationsAsync();
-            await MobileService.SyncContext.PushAsync();
+            await locationTable.DeleteAsync(location).ConfigureAwait(false);
+            await SyncLocationsAsync().ConfigureAwait(false);
+            await MobileService.SyncContext.PushAsync().ConfigureAwait(false);
 
             return true;
         }
 
         public async Task<Location> UpdateLocationAsync(Location location)
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await locationTable.UpdateAsync(location);
-            await SyncLocationsAsync();
-            await MobileService.SyncContext.PushAsync();
+            await locationTable.UpdateAsync(location).ConfigureAwait(false);
+            await SyncLocationsAsync().ConfigureAwait(false);
+            await MobileService.SyncContext.PushAsync().ConfigureAwait(false);
 
             return location;
         }
 
         public async Task<IEnumerable<Location>> GetLocationsAsync()
         {
-            await Init();
+            await Init().ConfigureAwait(false);
 
-            await SyncLocationsAsync();
+            await SyncLocationsAsync().ConfigureAwait(false);
 
-            return await locationTable.ToEnumerableAsync();
+            return await locationTable.ToEnumerableAsync().ConfigureAwait(false);
         }
 
         public async Task SyncLocationsAsync()
@@ -133,7 +133,7 @@ namespace OfficeLocator
                 if (!CrossConnectivity.Current.IsConnected || !Settings.NeedsSync)
                     return;
 
-                await locationTable.PullAsync("allOffices", locationTable.CreateQuery());
+                await locationTable.PullAsync("allOffices", locationTable.CreateQuery()).ConfigureAwait(false);
                 Settings.LastSync = DateTime.Now;
             }
             catch (Exception ex)
@@ -151,11 +151,11 @@ namespace OfficeLocator
             try
             {
                 Settings.NeedSyncFeedback = true;
+
                 if (!CrossConnectivity.Current.IsConnected)
                     return;
 
-
-                await MobileService.SyncContext.PushAsync();
+                await MobileService.SyncContext.PushAsync().ConfigureAwait(false);
                 Settings.NeedSyncFeedback = false;
             }
             catch (Exception ex)

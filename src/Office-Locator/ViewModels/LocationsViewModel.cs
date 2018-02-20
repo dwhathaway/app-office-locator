@@ -52,7 +52,7 @@ namespace OfficeLocator
             IsBusy = true;
             try
             {
-                await dataStore.RemoveLocationAsync(location);
+                await dataStore.RemoveLocationAsync(location).ConfigureAwait(false);
                 Locations.Remove(location);
                 Sort();
             }
@@ -86,7 +86,7 @@ namespace OfficeLocator
 
                 Geocoder geoCoder = new Geocoder();
 
-                var locations = await dataStore.GetLocationsAsync();
+                var locations = await dataStore.GetLocationsAsync().ConfigureAwait(false);
                 foreach (var location in locations)
                 {
                     if (string.IsNullOrWhiteSpace(location.Image))
@@ -96,7 +96,7 @@ namespace OfficeLocator
                     {
                         var address = location.StreetAddress + ", " + location.City +
                         ", " + location.State + ", " + location.ZipCode;
-                        var approximateLocations = await geoCoder.GetPositionsForAddressAsync(address);
+                        var approximateLocations = await geoCoder.GetPositionsForAddressAsync(address).ConfigureAwait(false);
 
                         Position pos = approximateLocations.FirstOrDefault();
                         location.Latitude = pos.Latitude;
