@@ -30,21 +30,18 @@ namespace OfficeLocator
         {
             base.OnAppearing();
 
-            if (viewModel.Locations.Count > 0 || viewModel.IsBusy)
-                return;
-            
-            LocationList.ItemSelected += HandleLocationListItemSelected;
+            LocationList.ItemTapped += HandleLocationListItemTapped;
             SearchBar.TextChanged += HandleSearchBarTextChanged;
             SearchBar.SearchButtonPressed += HandleSearchBarSearchButtonPressed;
 
-			LocationList.BeginRefresh();
+            LocationList.BeginRefresh();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
 
-            LocationList.ItemSelected -= HandleLocationListItemSelected;
+            LocationList.ItemTapped -= HandleLocationListItemTapped;
             SearchBar.TextChanged -= HandleSearchBarTextChanged;
             SearchBar.SearchButtonPressed -= HandleSearchBarSearchButtonPressed;
         }
@@ -59,40 +56,30 @@ namespace OfficeLocator
             FilterLocations(SearchBar.Text);
         }
 
-        async void HandleLocationListItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void HandleLocationListItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (LocationList.SelectedItem == null)
-                return;
-
-            await Navigation.PushAsync(new LocationPage(e.SelectedItem as Location));
-
             LocationList.SelectedItem = null;
+
+            if (e.Item != null)
+                await Navigation.PushAsync(new LocationPage(e.Item as Location));
         }
 
         void FilterLocations(string filter)
         {
-            LocationList.BeginRefresh();
-
-            List<Location> newFilteredItems = null;
-
             if (string.IsNullOrWhiteSpace(filter))
             {
                 LocationList.ItemsSource = viewModel.Locations;
             }
             else
             {
-                newFilteredItems = viewModel.Locations
-                    .Where(x => x.Name.ToLower()
-                    .Contains(filter.ToLower())).ToList();
+                var newFilteredItems = viewModel.Locations
+                    .Where(x => x.Name.ToUpper()
+                    .Contains(filter.ToUpper())).ToList();
 
                 LocationList.ItemsSource = newFilteredItems;
-            }
 
-            LocationList.EndRefresh();
-
-            if (newFilteredItems?.Count > 0)
-            {
-                LocationList.ScrollTo(newFilteredItems[0], ScrollToPosition.End, true);
+                if (newFilteredItems?.Count > 0)
+                    LocationList.ScrollTo(newFilteredItems[0], ScrollToPosition.End, true);
             }
         }
     }
