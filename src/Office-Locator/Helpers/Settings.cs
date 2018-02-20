@@ -5,25 +5,18 @@ using Plugin.Settings.Abstractions;
 
 namespace OfficeLocator
 {
-	public static class Settings
-	{
-        static ISettings AppSettings
-        {
-            get
-            {
-                return CrossSettings.Current;
-            }
-        }
-
-        #region Setting Constants
-
+    public static class Settings
+    {
         const string NeedSyncFeedbackKey = "need_sync_feedback";
-        static readonly bool NeedSyncFeedbackDefault = false;
-
         const string LastSyncKey = "last_sync";
+
+        static readonly bool NeedSyncFeedbackDefault = false;
         static readonly DateTime LastSyncDefault = DateTime.Now.AddDays(-30);
 
-		#endregion
+        static ISettings AppSettings
+        {
+            get { return CrossSettings.Current; }
+        }
 
         public static bool NeedsSync
         {
@@ -32,26 +25,14 @@ namespace OfficeLocator
 
         public static DateTime LastSync
         {
-            get
-            {
-                return AppSettings.GetValueOrDefault(LastSyncKey, LastSyncDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(LastSyncKey, value);
-            }
+            get { return AppSettings.GetValueOrDefault(LastSyncKey, LastSyncDefault); }
+            set { AppSettings.AddOrUpdateValue(LastSyncKey, value); }
         }
 
         public static bool NeedSyncFeedback
         {
-            get
-            {
-                return AppSettings.GetValueOrDefault(NeedSyncFeedbackKey, NeedSyncFeedbackDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(NeedSyncFeedbackKey, value);
-            }
+            get { return AppSettings.GetValueOrDefault(NeedSyncFeedbackKey, NeedSyncFeedbackDefault); }
+            set { AppSettings.AddOrUpdateValue(NeedSyncFeedbackKey, value); }
         }
-	}
+    }
 }

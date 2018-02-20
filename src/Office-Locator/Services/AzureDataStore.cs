@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 using Microsoft.AppCenter.Analytics;
@@ -24,7 +25,7 @@ namespace OfficeLocator
 
         IMobileServiceSyncTable<Location> locationTable;
         IMobileServiceSyncTable<Feedback> feedbackTable;
-        bool initialized = false;
+        bool isInitialized = false;
 
         AzureDataStore()
         {
@@ -40,11 +41,11 @@ namespace OfficeLocator
 
         public async Task Init()
         {
-            if (initialized)
+            if (isInitialized)
                 return;
 
             const string path = "synclocations.db";
-            var location = new MobileServiceSQLiteStore(path);
+            var location = new MobileServiceSQLiteStore(Path.Combine(MobileServiceClient.DefaultDatabasePath, path));
             location.DefineTable<Location>();
             location.DefineTable<Feedback>();
             await MobileService.SyncContext.InitializeAsync(location, new MobileServiceSyncHandler());
@@ -52,8 +53,7 @@ namespace OfficeLocator
             locationTable = MobileService.GetSyncTable<Location>();
             feedbackTable = MobileService.GetSyncTable<Feedback>();
 
-            var locations = await GetLocationsAsync();
-            initialized = true;
+			isInitialized = true;
         }
 
         public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
@@ -133,7 +133,7 @@ namespace OfficeLocator
                 if (!CrossConnectivity.Current.IsConnected || !Settings.NeedsSync)
                     return;
 
-                await locationTable.PullAsync("allOffices", locationTable.CreateQuery()/*.Where(o => o.AppId == AppId )*/);
+                await locationTable.PullAsync("allOffices", locationTable.CreateQuery());
                 Settings.LastSync = DateTime.Now;
             }
             catch (Exception ex)
