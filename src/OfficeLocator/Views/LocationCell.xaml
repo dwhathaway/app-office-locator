@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="OfficeLocator.Views.LocationCell"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:local="clr-namespace:OfficeLocator;assembly=OfficeLocator">
+    <Grid>
+        <Grid.Padding>
+            <OnPlatform x:TypeArguments="Thickness">
+                <OnPlatform.iOS>
+                    10,5,10,5
+                </OnPlatform.iOS>
+                <OnPlatform.Android>
+                    10,5,10,5
+                </OnPlatform.Android>
+                <OnPlatform.WinPhone>
+                    20,25,20,25
+                </OnPlatform.WinPhone>
+            </OnPlatform>
+        </Grid.Padding>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ffimageloading:CachedImage Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"
+            DownsampleToViewSize="true"
+            Source = "{Binding ImageUri}">
+            <ffimageloading:CachedImage.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <OnPlatform.iOS>50</OnPlatform.iOS>
+                    <OnPlatform.Android>50 </OnPlatform.Android>
+                    <OnPlatform.WinPhone>70</OnPlatform.WinPhone>
+                </OnPlatform>
+            </ffimageloading:CachedImage.WidthRequest>
+            <ffimageloading:CachedImage.HeightRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <OnPlatform.iOS>50</OnPlatform.iOS>
+                    <OnPlatform.Android>50</OnPlatform.Android>
+                    <OnPlatform.WinPhone>70</OnPlatform.WinPhone>
+                </OnPlatform>
+            </ffimageloading:CachedImage.HeightRequest>
+            <ffimageloading:CachedImage.Transformations>
+                <fftransformations:CircleTransformation>
+                    <x:Arguments>
+                      <x:Double>5</x:Double>
+                      <x:String>#C485CC</x:String>
+                    </x:Arguments>
+                </fftransformations:CircleTransformation>
+            </ffimageloading:CachedImage.Transformations>
+        </ffimageloading:CachedImage>
+        <StackLayout Grid.Column="1" Padding="8" Spacing="4" VerticalOptions="Center">
+            <Label Text="{Binding Name}" FontSize="13" TextColor="#2C3E50" LineBreakMode="WordWrap" />
+        </StackLayout>
+    </Grid>
+</ViewCell>
