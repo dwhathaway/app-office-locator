@@ -20,7 +20,7 @@ namespace OfficeLocator
 
             Analytics.TrackEvent("Locations");
 
-            BindingContext = viewModel = new LocationsViewModel(this);
+            BindingContext = viewModel = new LocationsViewModel();
 
             LocationList.IsGroupingEnabled = false;
             LocationList.ItemsSource = viewModel.Locations;
@@ -33,9 +33,15 @@ namespace OfficeLocator
             LocationList.ItemTapped += HandleLocationListItemTapped;
             SearchBar.TextChanged += HandleSearchBarTextChanged;
             SearchBar.SearchButtonPressed += HandleSearchBarSearchButtonPressed;
+            viewModel.ErrorOcurred += HandleErrorOcurred;
 
             if (viewModel.Locations.Count <= 0)
                 LocationList.BeginRefresh();
+        }
+
+        async void HandleErrorOcurred(object sender, string message)
+        {
+            await DisplayAlert("Error", message, "Ok");
         }
 
         protected override void OnDisappearing()

@@ -85,7 +85,7 @@
 					VerticalOptions = "Start"
 					FontSize="24"
 					HorizontalOptions = "CenterAndExpand"
-					Command="{Binding CallCommand}"/>
+					Clicked="HandleButtonFindLocationClicked"/>
 
 				<local:ImageButton 
 					Grid.Row="3"

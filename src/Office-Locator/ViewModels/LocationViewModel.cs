@@ -1,18 +1,16 @@
 ﻿using OfficeLocator.Model;
 
 using Plugin.ExternalMaps;
-using Plugin.Messaging;
 
 using Xamarin.Forms;
-using System.Threading.Tasks;
 
 namespace OfficeLocator
 {
     public class LocationViewModel : BaseViewModel
     {
-        Command navigateCommand, callCommand;
+        Command navigateCommand;
 
-        public LocationViewModel(Location location, Page page) : base(page)
+        public LocationViewModel(Location location)
         {
             Office = location;
         }
@@ -37,26 +35,6 @@ namespace OfficeLocator
             }
         }
 
-        public Command CallCommand
-        {
-            get { return callCommand ?? (callCommand = new Command(async () => await ExecuteCallCommand())); }
-        }
-
         public Location Office { get; set; }
-
-        async Task ExecuteCallCommand()
-        {
-            var phoneCallTask = CrossMessaging.Current.PhoneDialer;
-            if (phoneCallTask.CanMakePhoneCall)
-            {
-                if (!string.IsNullOrEmpty(Office.PhoneNumber))
-                {
-                    if (await page.DisplayAlert("Call?", "Call " + Office.PhoneNumber + "?", "Call", "Cancel").ConfigureAwait(false))
-                    {
-                        phoneCallTask.MakePhoneCall(Office.PhoneNumber);
-                    }
-                }
-            }
-        }
     }
 }

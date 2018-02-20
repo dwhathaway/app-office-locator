@@ -21,7 +21,7 @@ namespace OfficeLocator
 
         Command locationListRefreshCommand;
 
-        public LocationsViewModel(Page page) : base(page)
+        public LocationsViewModel()
         {
             Title = "Locations";
             dataStore = AzureDataStore.Instance;
@@ -58,7 +58,8 @@ namespace OfficeLocator
             }
             catch (Exception ex)
             {
-                page.DisplayAlert("Uh Oh :(", "Unable to remove location, please try again", "OK");
+                OnErrorOcurred("Unable to remove location, please try again");
+
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
@@ -110,7 +111,8 @@ namespace OfficeLocator
             }
             catch (Exception ex)
             {
-                page.DisplayAlert("Uh Oh :(", "Unable to gather locations.", "OK");
+                OnErrorOcurred("Unable to gather locations");
+
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }

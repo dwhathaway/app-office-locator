@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\FeedbackPage.xaml" />
+    <None Remove="Views\HomePage.xaml" />
+    <None Remove="Views\LocationPage.xaml" />
+    <None Remove="Views\LocationsPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
@@ -15,26 +21,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Model\" />
     <Folder Include="Constants\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Views\FeedbackPage.xaml" />
-    <None Remove="Views\HomePage.xaml" />
-    <None Remove="Views\LocationPage.xaml" />
-    <None Remove="Views\LocationsPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Views\FeedbackPage.xaml.cs">
-      <DependentUpon>..\..\Office-Locator_pcl\Views\FeedbackPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\HomePage.xaml.cs">
-      <DependentUpon>..\..\Office-Locator_pcl\Views\HomePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocationPage.xaml.cs">
-      <DependentUpon>..\..\Office-Locator_pcl\Views\LocationPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocationsPage.xaml.cs">
-      <DependentUpon>..\..\Office-Locator_pcl\Views\LocationsPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Push" Version="1.4.0" />

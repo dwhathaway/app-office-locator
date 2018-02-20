@@ -8,18 +8,13 @@ namespace OfficeLocator
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        protected Page page;
         string title = string.Empty;
         string subTitle = string.Empty;
         bool isBusy;
         string icon;
 
-        public BaseViewModel(Page page)
-        {
-            this.page = page;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<string> ErrorOcurred;
 
         /// <summary>
         /// Gets or sets the reverse of  isbusy. Handy for hiding views during busy times.
@@ -88,7 +83,12 @@ namespace OfficeLocator
             onChanged?.Invoke();
         }
 
-        public void OnPropertyChanged(string propertyName)
+        protected void OnErrorOcurred(string errorMessage)
+        {
+            ErrorOcurred?.Invoke(this, errorMessage);
+        }
+
+        void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged == null)
                 return;

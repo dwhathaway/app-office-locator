@@ -12,7 +12,7 @@ namespace OfficeLocator
 {
     public class FeedbackViewModel : BaseViewModel
     {
-		readonly IDataStore dataStore;
+        readonly IDataStore dataStore;
 
         bool requiresCall = false;
         string phone = string.Empty;
@@ -24,15 +24,17 @@ namespace OfficeLocator
 
         Location location;
         Command saveFeedbackCommand;
-		DateTime date = DateTime.Today;
+        DateTime date = DateTime.Today;
 
-        public FeedbackViewModel(Page page, Location loc) : base(page)
+        public FeedbackViewModel(Location loc)
         {
             location = loc;
             dataStore = AzureDataStore.Instance;
             Title = "Leave Feedback";
             LocationName = location.Name;
         }
+
+        public event EventHandler FeedbackSubmissionCompleted;
 
         public Command SaveFeedbackCommand
         {
@@ -100,7 +102,7 @@ namespace OfficeLocator
 
             if (string.IsNullOrWhiteSpace(Text))
             {
-                await page.DisplayAlert("Enter Feedback", "Please enter some feedback for our team.", "OK").ConfigureAwait(false);;
+                OnErrorOcurred("Please enter some feedback for our team");
                 return;
             }
 
@@ -121,10 +123,12 @@ namespace OfficeLocator
                     PhoneNumber = PhoneNumber,
                     RequiresCall = RequiresCall,
                 });
+
+                OnFeedbackCompleted();
             }
             catch (Exception ex)
             {
-                page.DisplayAlert("Uh Oh :(", "Unable to save feedback, please try again.", "OK");
+                OnErrorOcurred("Unable to save feedback, please try again");
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
@@ -134,8 +138,11 @@ namespace OfficeLocator
             {
                 IsBusy = false;
             }
+        }
 
-            await page.Navigation.PopAsync();
+        void OnFeedbackCompleted()
+        {
+            FeedbackSubmissionCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
