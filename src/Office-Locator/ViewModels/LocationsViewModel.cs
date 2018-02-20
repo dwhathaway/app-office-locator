@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using OfficeLocator.Model;
 using OfficeLocator.Services;
 using Xamarin.Forms.Maps;
-using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.AppCenter.Analytics;
 
 namespace OfficeLocator
 {

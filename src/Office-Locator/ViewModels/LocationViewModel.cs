@@ -40,7 +40,7 @@ namespace OfficeLocator
 		{
 			get {
 				return callCommand ?? (callCommand = new Command (async () => {
-					var phoneCallTask = MessagingPlugin.PhoneDialer;
+					var phoneCallTask = CrossMessaging.Current.PhoneDialer;
 					if (phoneCallTask.CanMakePhoneCall)
 					{
 						if (!string.IsNullOrEmpty(Office.PhoneNumber))

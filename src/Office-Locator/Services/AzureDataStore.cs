@@ -18,7 +18,7 @@ using Plugin.EmbeddedResource;
 using Newtonsoft.Json;
 using System.Reflection;
 using Xamarin;
-using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.AppCenter.Analytics;
 
 [assembly: Dependency(typeof(AzureDataStore))]
 namespace OfficeLocator
@@ -35,7 +35,7 @@ namespace OfficeLocator
 		{
             // This is a sample read-only azure site for demo
             // Follow the readme.md in the GitHub repo on how to setup your own.
-#error Missing Azure Endpoint URL
+//#error Missing Azure Endpoint URL
             MobileService = new MobileServiceClient("[your endpoint here]");
         }
 
