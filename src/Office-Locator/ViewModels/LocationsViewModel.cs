@@ -1,34 +1,54 @@
 ﻿using System;
-using Xamarin.Forms;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
-using OfficeLocator.Model;
-using OfficeLocator.Services;
-using Xamarin.Forms.Maps;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Microsoft.AppCenter.Analytics;
+
+using OfficeLocator.Model;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace OfficeLocator
 {
     public class LocationsViewModel : BaseViewModel
     {
         readonly IDataStore dataStore;
-        public ObservableCollection<Location> Locations { get; set; }
-        public ObservableCollection<Grouping<string, Location>> LocationsGrouped { get; set; }
-        public bool ForceSync { get; set; }
+
+        bool isRefreshing;
+
+        Command locationListRefreshCommand;
+
         public LocationsViewModel(Page page) : base(page)
         {
             Title = "Locations";
-            dataStore = DependencyService.Get<IDataStore>();
+            dataStore = AzureDataStore.Instance;
             Locations = new ObservableCollection<Location>();
             LocationsGrouped = new ObservableCollection<Grouping<string, Location>>();
         }
+
+        public Command LocationListRefreshCommand
+        {
+            get { return locationListRefreshCommand ?? (locationListRefreshCommand = new Command(async () => await ExecuteLocationListRefreshCommand(), () => !IsRefreshing)); }
+        }
+
+        public bool IsRefreshing
+        {
+            get { return isRefreshing; }
+            set { SetProperty(ref isRefreshing, value); }
+        }
+
+        public ObservableCollection<Location> Locations { get; set; }
+        public ObservableCollection<Grouping<string, Location>> LocationsGrouped { get; set; }
+        public bool ForceSync { get; set; }
 
         public async Task DeleteLocation(Location location)
         {
             if (IsBusy)
                 return;
+
             IsBusy = true;
             try
             {
@@ -47,21 +67,10 @@ namespace OfficeLocator
             finally
             {
                 IsBusy = false;
-
             }
         }
 
-        private Command getLocationsCommand;
-        public Command GetLocationsCommand
-        {
-            get
-            {
-                return getLocationsCommand ??
-                    (getLocationsCommand = new Command(async () => await ExecuteGetLocationsCommand(), () => { return !IsBusy; }));
-            }
-        }
-
-        private async Task ExecuteGetLocationsCommand()
+        async Task ExecuteLocationListRefreshCommand()
         {
             if (IsBusy)
                 return;
@@ -69,13 +78,12 @@ namespace OfficeLocator
             if (ForceSync)
                 Settings.LastSync = DateTime.Now.AddDays(-30);
 
-            IsBusy = true;
-            GetLocationsCommand.ChangeCanExecute();
+            IsBusy = IsRefreshing = true;
+
             try
             {
                 Locations.Clear();
 
-                //var stores = new List<Store>();
                 Geocoder geoCoder = new Geocoder();
 
                 var locations = await dataStore.GetLocationsAsync();
@@ -84,7 +92,6 @@ namespace OfficeLocator
                     if (string.IsNullOrWhiteSpace(location.Image))
                         location.Image = "http://refractored.com/images/wc_small.jpg";
 
-                    //geocode the street address if the data doesn't contain coordinates
                     if (location.Latitude == 0 && location.Longitude == 0)
                     {
                         var address = location.StreetAddress + ", " + location.City +
@@ -111,16 +118,14 @@ namespace OfficeLocator
             }
             finally
             {
-                IsBusy = false;
-                GetLocationsCommand.ChangeCanExecute();
+                IsBusy = IsRefreshing = false;
             }
-
         }
 
-        private void Sort()
+        void Sort()
         {
-
             LocationsGrouped.Clear();
+
             var sorted = from location in Locations
                          orderby location.Country, location.City
                          group location by location.Country into locationGroup
@@ -130,6 +135,4 @@ namespace OfficeLocator
                 LocationsGrouped.Add(sort);
         }
     }
-
 }
-

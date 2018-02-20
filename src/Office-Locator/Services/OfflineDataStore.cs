@@ -1,73 +1,76 @@
-﻿using OfficeLocator;
-using OfficeLocator.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using PCLStorage;
-using Plugin.EmbeddedResource;
-using System.Threading.Tasks;
 using System.Reflection;
-using Xamarin.Forms;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
+using OfficeLocator.Model;
 using OfficeLocator.Services;
+
+using PCLStorage;
+
+using Plugin.EmbeddedResource;
+
+using Xamarin.Forms;
 
 [assembly: Dependency(typeof(OfflineDataStore))]
 namespace OfficeLocator.Services
 {
     public class OfflineDataStore : IDataStore
     {
-
-        public async Task<IEnumerable<Location>> GetLocationsAsync()
+        public Task<IEnumerable<Location>> GetLocationsAsync()
         {
             var rootFolder = FileSystem.Current.LocalStorage;
             var json = ResourceLoader.GetEmbeddedResourceString(Assembly.Load(new AssemblyName("OfficeLocator")), "locations.json");
-            return JsonConvert.DeserializeObject<List<Location>>(json);
+            return Task.FromResult(JsonConvert.DeserializeObject<IEnumerable<Location>>(json));
         }
 
-        public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
+        public Task<Feedback> AddFeedbackAsync(Feedback feedback)
         {
-           
-            return feedback;
+            return Task.FromResult(feedback);
         }
 
-        public async Task<Location> AddLocationAsync(Location location)
+        public Task<Location> AddLocationAsync(Location location)
         {
-            return location;
+            return Task.FromResult(location);
         }
 
-        public async Task<IEnumerable<Feedback>> GetFeedbackAsync()
+        public Task<IEnumerable<Feedback>> GetFeedbackAsync()
         {
-            return new List<Feedback>();
-        }
+            IEnumerable<Feedback> feedbackList = new List<Feedback>();
 
+            return Task.FromResult(feedbackList);
+        }
 
         public Task Init()
         {
-            return Task.Run(() => { });
+            return Task.CompletedTask;
         }
 
-        public async Task<bool> RemoveFeedbackAsync(Feedback feedback)
+        public Task<bool> RemoveFeedbackAsync(Feedback feedback)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
-        public async Task<bool> RemoveLocationAsync(Location location)
+        public Task<bool> RemoveLocationAsync(Location location)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         public Task SyncFeedbacksAsync()
         {
-            return Task.Run(() => { });
+            return Task.CompletedTask;
         }
 
         public Task SyncStoresAsync()
         {
-            return Task.Run(() => { });
+            return Task.CompletedTask;
         }
 
-        public async Task<Location> UpdateStoreAsync(Location location)
+        public Task<Location> UpdateStoreAsync(Location location)
         {
-            return location;
+            return Task.FromResult(location);
         }
 
         public Task<Location> UpdateLocationAsync(Location office)

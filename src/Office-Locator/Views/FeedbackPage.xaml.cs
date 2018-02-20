@@ -1,60 +1,32 @@
-﻿using OfficeLocator.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-using Xamarin.Forms;
 using Microsoft.AppCenter.Analytics;
+
+using OfficeLocator.Model;
+
+using Xamarin.Forms;
 
 namespace OfficeLocator
 {
-	public partial class FeedbackPage : ContentPage
-	{
-		FeedbackViewModel viewModel;
-		ToolbarItem butSubmitFeedBack;
+    public partial class FeedbackPage : ContentPage
+    {
+        readonly FeedbackViewModel viewModel;
+        readonly ToolbarItem butSubmitFeedBack;
 
-		public FeedbackPage (Location location)
-		{
-			InitializeComponent ();
-            Analytics.TrackEvent ("Feedback - " + location.Name);
-			BindingContext = viewModel = new FeedbackViewModel (this, location);
+        public FeedbackPage(Location location)
+        {
+            InitializeComponent();
 
-			butSubmitFeedBack = new ToolbarItem {
-				Text = "Submit"
-			};
+            Analytics.TrackEvent("Feedback - " + location.Name);
 
-			butSubmitFeedBack.Command = viewModel.SaveFeedbackCommand;
+            BindingContext = viewModel = new FeedbackViewModel(this, location);
 
-			ToolbarItems.Add (butSubmitFeedBack);
+            butSubmitFeedBack = new ToolbarItem { Text = "Submit" };
+            butSubmitFeedBack.Command = viewModel.SaveFeedbackCommand;
 
-//			PickerRating.SelectedIndex = 10;
-//			PickerServiceType.SelectedIndex = 0;
-//
-//			PickerStore.SelectedIndexChanged += (sender, e) => 
-//			{
-//				viewModel.StoreName = PickerStore.Items[PickerStore.SelectedIndex];
-//			};
-
-		}
-
-		protected override  void OnAppearing ()
-		{
-			base.OnAppearing ();
-
-			try
-			{
-				//var locations = await viewModel.GetLocationAsync();
-//				foreach(var store in stores)
-//					PickerStore.Items.Add(store.Name);
-			}
-			catch(Exception ex) {
-				
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
-				DisplayAlert ("Uh oh :(", "Unable to get locations, don't worry you can still submit feedback.", "OK");
-			}
-		}
-	}
+            ToolbarItems.Add(butSubmitFeedBack);
+        }
+    }
 }
 

@@ -31,7 +31,7 @@
 				TextColor="White" 
 				Text="Government"/>
 			<Button 
-				x:Name="butShowPrivateSectorLocations"
+				x:Name="ButShowPrivateSectorLocations"
 				Grid.Row="2"
 				BackgroundColor="#81C134" 
 				BorderRadius="0"

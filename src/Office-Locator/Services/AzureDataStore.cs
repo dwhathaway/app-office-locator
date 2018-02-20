@@ -1,187 +1,171 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+
+using Microsoft.AppCenter.Analytics;
 using Microsoft.WindowsAzure.MobileServices;
-using System.Linq;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
-using System.Diagnostics;
-using System;
-using Xamarin.Forms;
 
-//Comment back in to use azure
 using OfficeLocator;
-using Plugin.Connectivity;
 using OfficeLocator.Model;
-using PCLStorage;
-using Plugin.EmbeddedResource;
-using Newtonsoft.Json;
-using System.Reflection;
-using Xamarin;
-using Microsoft.AppCenter.Analytics;
+
+using Plugin.Connectivity;
+
+using Xamarin.Forms;
 
 [assembly: Dependency(typeof(AzureDataStore))]
 namespace OfficeLocator
 {
-	public class AzureDataStore : IDataStore
-	{
-         public MobileServiceClient MobileService { get; set; }
+    public class AzureDataStore : IDataStore
+    {
+        static AzureDataStore instance;
 
-		IMobileServiceSyncTable<Location> locationTable;
-		IMobileServiceSyncTable<Feedback> feedbackTable;
-		bool initialized = false;
+        IMobileServiceSyncTable<Location> locationTable;
+        IMobileServiceSyncTable<Feedback> feedbackTable;
+        bool initialized = false;
 
-		public AzureDataStore()
-		{
-            // This is a sample read-only azure site for demo
-            // Follow the readme.md in the GitHub repo on how to setup your own.
-//#error Missing Azure Endpoint URL
-            MobileService = new MobileServiceClient("[your endpoint here]");
+        AzureDataStore()
+        {
+            MobileService = new MobileServiceClient(AzureConstants.MobileServiceClientUrl);
         }
 
-		public async Task Init()
-		{
-			initialized = true;
-			const string path = "synclocations.db";
-			var location = new MobileServiceSQLiteStore(path);
-			location.DefineTable<Location>();
-			location.DefineTable<Feedback> ();
-			await MobileService.SyncContext.InitializeAsync(location, new MobileServiceSyncHandler());
-
-			locationTable = MobileService.GetSyncTable<Location>();
-			feedbackTable = MobileService.GetSyncTable<Feedback> ();
-
-			var locations = await GetLocationsAsync ();
+        public static AzureDataStore Instance
+        {
+            get { return instance ?? (instance = new AzureDataStore()); }
         }
-        
-		public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
-		{
-			if (!initialized)
-				await Init();
 
+        MobileServiceClient MobileService { get; set; }
 
-			await feedbackTable.InsertAsync(feedback);
-			await SyncFeedbacksAsync ();
-			return feedback;
-		}
+        public async Task Init()
+        {
+            if (initialized)
+                return;
 
-		public async Task<IEnumerable<Feedback>> GetFeedbackAsync ()
-		{
+            const string path = "synclocations.db";
+            var location = new MobileServiceSQLiteStore(path);
+            location.DefineTable<Location>();
+            location.DefineTable<Feedback>();
+            await MobileService.SyncContext.InitializeAsync(location, new MobileServiceSyncHandler());
 
-			if (!initialized)
-				await Init();
+            locationTable = MobileService.GetSyncTable<Location>();
+            feedbackTable = MobileService.GetSyncTable<Feedback>();
 
-			await feedbackTable.PullAsync("allFeedbacks", feedbackTable.CreateQuery());
+            var locations = await GetLocationsAsync();
+            initialized = true;
+        }
 
-			return await feedbackTable.ToEnumerableAsync();
-		}
+        public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
+        {
+            await Init();
 
-		public async Task<bool> RemoveFeedbackAsync (Feedback feedback)
-		{
-			if (!initialized)
-				await Init();
+            await feedbackTable.InsertAsync(feedback);
+            await SyncFeedbacksAsync();
+            return feedback;
+        }
 
-			await feedbackTable.DeleteAsync (feedback);
-			await SyncFeedbacksAsync ();
-			return true;
-		}
+        public async Task<IEnumerable<Feedback>> GetFeedbackAsync()
+        {
+            await Init();
 
-		public async Task<Location> AddLocationAsync (Location location)
-		{
-			if (!initialized)
-				await Init();
+            await feedbackTable.PullAsync("allFeedbacks", feedbackTable.CreateQuery());
 
-			await locationTable.InsertAsync (location);
-			await SyncLocationsAsync ();
-			await MobileService.SyncContext.PushAsync();
-			return location;
-		}
+            return await feedbackTable.ToEnumerableAsync();
+        }
 
-		public async Task<bool> RemoveLocationAsync (Location location)
-		{
-			if (!initialized)
-				await Init();
+        public async Task<bool> RemoveFeedbackAsync(Feedback feedback)
+        {
+            await Init();
 
-			await locationTable.DeleteAsync (location);
-			await SyncLocationsAsync ();
-			await MobileService.SyncContext.PushAsync();
-			return true;
-		}
+            await feedbackTable.DeleteAsync(feedback);
+            await SyncFeedbacksAsync();
 
-		public async Task<Location> UpdateLocationAsync (Location location)
-		{
-			if (!initialized)
-				await Init();
+            return true;
+        }
 
-			await locationTable.UpdateAsync (location);
-			await SyncLocationsAsync ();
-			await MobileService.SyncContext.PushAsync();
-			return location;
-		}			
+        public async Task<Location> AddLocationAsync(Location location)
+        {
+            await Init();
 
-		public async Task<IEnumerable<Location>> GetLocationsAsync()
-		{
-			if (!initialized)
-				await Init();
+            await locationTable.InsertAsync(location);
+            await SyncLocationsAsync();
+            await MobileService.SyncContext.PushAsync();
 
-			await SyncLocationsAsync();
-			return await locationTable.ToEnumerableAsync();
-		}
+            return location;
+        }
 
-		public async Task SyncLocationsAsync()
-		{
-			try
-			{
-                if(!CrossConnectivity.Current.IsConnected || !Settings.NeedsSync)
-                	return;
-				
-				await locationTable.PullAsync("allOffices", locationTable.CreateQuery()/*.Where(o => o.AppId == AppId )*/);
-				Settings.LastSync = DateTime.Now;
-			}
-			catch(Exception ex)
-			{
+        public async Task<bool> RemoveLocationAsync(Location location)
+        {
+            await Init();
+
+            await locationTable.DeleteAsync(location);
+            await SyncLocationsAsync();
+            await MobileService.SyncContext.PushAsync();
+
+            return true;
+        }
+
+        public async Task<Location> UpdateLocationAsync(Location location)
+        {
+            await Init();
+
+            await locationTable.UpdateAsync(location);
+            await SyncLocationsAsync();
+            await MobileService.SyncContext.PushAsync();
+
+            return location;
+        }
+
+        public async Task<IEnumerable<Location>> GetLocationsAsync()
+        {
+            await Init();
+
+            await SyncLocationsAsync();
+
+            return await locationTable.ToEnumerableAsync();
+        }
+
+        public async Task SyncLocationsAsync()
+        {
+            try
+            {
+                if (!CrossConnectivity.Current.IsConnected || !Settings.NeedsSync)
+                    return;
+
+                await locationTable.PullAsync("allOffices", locationTable.CreateQuery()/*.Where(o => o.AppId == AppId )*/);
+                Settings.LastSync = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
                 });
-				Debug.WriteLine("Sync Failed:" + ex.Message);
-			}
-		}
+                Debug.WriteLine("Sync Failed:" + ex.Message);
+            }
+        }
 
-		public async Task SyncFeedbacksAsync ()
-		{
-			try
-			{
-				Settings.NeedSyncFeedback = true;
-				if(!CrossConnectivity.Current.IsConnected)
-					return;
+        public async Task SyncFeedbacksAsync()
+        {
+            try
+            {
+                Settings.NeedSyncFeedback = true;
+                if (!CrossConnectivity.Current.IsConnected)
+                    return;
 
 
-				await MobileService.SyncContext.PushAsync();
-				Settings.NeedSyncFeedback = false;
-			}
-			catch(Exception ex)
-			{
+                await MobileService.SyncContext.PushAsync();
+                Settings.NeedSyncFeedback = false;
+            }
+            catch (Exception ex)
+            {
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
                 });
-				Debug.WriteLine("Sync Failed:" + ex.Message);
-			}
-		}
-
-		static readonly AzureDataStore instance = new AzureDataStore();
-
-		/// <summary>
-		/// Gets the instance of the Azure Web Service
-		/// </summary>
-		public static AzureDataStore Instance
-		{
-			get
-			{
-				return instance;
-			}
-		}
-
-	}
+                Debug.WriteLine("Sync Failed:" + ex.Message);
+            }
+        }
+    }
 }

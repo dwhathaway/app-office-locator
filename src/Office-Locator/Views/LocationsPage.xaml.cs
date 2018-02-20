@@ -1,49 +1,75 @@
-﻿using OfficeLocator.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Xamarin.Forms;
+
 using Microsoft.AppCenter.Analytics;
+
+using OfficeLocator.Model;
+
+using Xamarin.Forms;
 
 namespace OfficeLocator
 {
-	public partial class LocationsPage : ContentPage
-	{
-		private LocationsViewModel viewModel;
-		public LocationsPage ()
-		{
-			InitializeComponent ();
+    public partial class LocationsPage : ContentPage
+    {
+        readonly LocationsViewModel viewModel;
 
-            Analytics.TrackEvent ("Locations");
+        public LocationsPage()
+        {
+            InitializeComponent();
 
-			BindingContext = viewModel = new LocationsViewModel (this);
+            Analytics.TrackEvent("Locations");
 
-			LocationList.ItemSelected += (sender, e) => 
-			{
-				if(LocationList.SelectedItem == null)
-					return;
+            BindingContext = viewModel = new LocationsViewModel(this);
 
+            LocationList.IsGroupingEnabled = false;
+            LocationList.ItemsSource = viewModel.Locations;
+        }
 
-				Navigation.PushAsync(new LocationPage(e.SelectedItem as Location));
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
 
+            if (viewModel.Locations.Count > 0 || viewModel.IsBusy)
+                return;
+            
+            LocationList.ItemSelected += HandleLocationListItemSelected;
+            SearchBar.TextChanged += HandleSearchBarTextChanged;
+            SearchBar.SearchButtonPressed += HandleSearchBarSearchButtonPressed;
 
-				LocationList.SelectedItem = null;
-			};
+			LocationList.BeginRefresh();
+        }
 
-            searchBar.TextChanged += (sender, e) => FilterLocations(searchBar.Text);
-            searchBar.SearchButtonPressed += (sender, e) => {
-                FilterLocations(searchBar.Text);
-            };
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
 
-           // if (Device.OS == TargetPlatform.WinPhone)
-			{
-				LocationList.IsGroupingEnabled = false;
-				LocationList.ItemsSource = viewModel.Locations;
-			}
-		}
+            LocationList.ItemSelected -= HandleLocationListItemSelected;
+            SearchBar.TextChanged -= HandleSearchBarTextChanged;
+            SearchBar.SearchButtonPressed -= HandleSearchBarSearchButtonPressed;
+        }
 
-        public void FilterLocations(string filter)
+        void HandleSearchBarSearchButtonPressed(object sender, EventArgs e)
+        {
+            FilterLocations(SearchBar.Text);
+        }
+
+        void HandleSearchBarTextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterLocations(SearchBar.Text);
+        }
+
+        async void HandleLocationListItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (LocationList.SelectedItem == null)
+                return;
+
+            await Navigation.PushAsync(new LocationPage(e.SelectedItem as Location));
+
+            LocationList.SelectedItem = null;
+        }
+
+        void FilterLocations(string filter)
         {
             LocationList.BeginRefresh();
 
@@ -55,32 +81,20 @@ namespace OfficeLocator
             }
             else
             {
-                 newFilteredItems = viewModel.Locations
+                newFilteredItems = viewModel.Locations
                     .Where(x => x.Name.ToLower()
-                   .Contains(filter.ToLower())).ToList<Location>();
+                    .Contains(filter.ToLower())).ToList();
+
                 LocationList.ItemsSource = newFilteredItems;
             }
 
             LocationList.EndRefresh();
-            if(newFilteredItems != null && newFilteredItems.Count>0)
+
+            if (newFilteredItems?.Count > 0)
             {
                 LocationList.ScrollTo(newFilteredItems[0], ScrollToPosition.End, true);
             }
         }
-
-        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnAppearing ()
-		{
-			base.OnAppearing ();
-			if (viewModel.Locations.Count > 0 || viewModel.IsBusy)
-				return;
-
-			viewModel.GetLocationsCommand.Execute (null);
-		}
-	}
+    }
 }
 

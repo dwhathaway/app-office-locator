@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+
 using Newtonsoft.Json;
 
 namespace OfficeLocator.Model
@@ -38,6 +38,12 @@ namespace OfficeLocator.Model
 			URL = string.Empty;
 		}
 
+        [JsonIgnore]
+        public Uri ImageUri
+        {
+            get { return new System.Uri(Image); }
+        }
+
         public string AppId { get; set; }
 
 		[JsonProperty(PropertyName = "id")]
@@ -58,13 +64,6 @@ namespace OfficeLocator.Model
 		public string Image { get; set; }
 
 		public string URL { get; set; }
-
-
-		[JsonIgnore]
-		public Uri ImageUri
-		{
-			get { return new System.Uri(Image); }
-		}
 
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }

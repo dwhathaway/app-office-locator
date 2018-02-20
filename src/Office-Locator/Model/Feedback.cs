@@ -17,9 +17,15 @@ namespace OfficeLocator
 			RequiresCall = false;
 			LocationName = string.Empty;
 		}
+
+        [JsonIgnore]
+        public string VisitDateDisplay
+        {
+            get { return FeedbackDate.ToString("g"); }
+        }
+
 		[JsonProperty(PropertyName = "id")]
 		public string Id { get; set; }
-
 
 		[Microsoft.WindowsAzure.MobileServices.Version]
 		public string Version { get; set; }
@@ -34,12 +40,6 @@ namespace OfficeLocator
 		public string PhoneNumber { get; set; }
 		public bool RequiresCall { get; set; }
 		public string LocationName { get; set; }
-
-		[JsonIgnore]
-		public string VisitDateDisplay
-		{
-			get { return FeedbackDate.ToString("g"); }
-		}
 	}
 }
 

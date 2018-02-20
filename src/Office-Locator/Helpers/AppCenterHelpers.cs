@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Distribute;
 
 namespace OfficeLocator
 {
@@ -52,7 +51,9 @@ namespace OfficeLocator
             System.Diagnostics.Debug.WriteLine($"Error: {message}");
         }
 
-        static void Start(string appSecret) =>
+        static void Start(string appSecret)
+        {
             AppCenter.Start(appSecret, typeof(Analytics), typeof(Crashes));
+        }
     }
 }
