@@ -11,63 +11,69 @@ using Microsoft.AppCenter.Analytics;
 
 namespace OfficeLocator
 {
-	public class LocationsViewModel : BaseViewModel
-	{
-		readonly IDataStore dataStore;
-		public ObservableCollection<Location> Locations { get; set;}
-		public ObservableCollection<Grouping<string, Location>> LocationsGrouped { get; set; }
-		public bool ForceSync { get; set; }
-		public LocationsViewModel (Page page) : base (page)
-		{
-			Title = "Locations";
-            dataStore = DependencyService.Get<AzureDataStore>(); //DependencyService.Get<IDataStore> ();
-            Locations = new ObservableCollection<Location> ();
-			LocationsGrouped = new ObservableCollection<Grouping<string, Location>> ();
-		}
+    public class LocationsViewModel : BaseViewModel
+    {
+        readonly IDataStore dataStore;
+        public ObservableCollection<Location> Locations { get; set; }
+        public ObservableCollection<Grouping<string, Location>> LocationsGrouped { get; set; }
+        public bool ForceSync { get; set; }
+        public LocationsViewModel(Page page) : base(page)
+        {
+            Title = "Locations";
+            dataStore = DependencyService.Get<IDataStore>();
+            Locations = new ObservableCollection<Location>();
+            LocationsGrouped = new ObservableCollection<Grouping<string, Location>>();
+        }
 
-		public async Task DeleteLocation(Location location)
-		{
-			if (IsBusy)
-				return;
-			IsBusy = true;
-			try {
-				await dataStore.RemoveLocationAsync(location);
-				Locations.Remove(location);
-				Sort();
-			} catch(Exception ex) {
-				page.DisplayAlert ("Uh Oh :(", "Unable to remove location, please try again", "OK");
+        public async Task DeleteLocation(Location location)
+        {
+            if (IsBusy)
+                return;
+            IsBusy = true;
+            try
+            {
+                await dataStore.RemoveLocationAsync(location);
+                Locations.Remove(location);
+                Sort();
+            }
+            catch (Exception ex)
+            {
+                page.DisplayAlert("Uh Oh :(", "Unable to remove location, please try again", "OK");
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
                 });
-			}
-			finally {
-				IsBusy = false;
-				
-			}
-		}
+            }
+            finally
+            {
+                IsBusy = false;
 
-		private Command getLocationsCommand;
-		public Command GetLocationsCommand
-		{
-			get {
-				return getLocationsCommand ??
-					(getLocationsCommand = new Command (async () => await ExecuteGetLocationsCommand (), () => {return !IsBusy;}));
-			}
-		}
+            }
+        }
 
-		private async Task ExecuteGetLocationsCommand()
-		{
-			if (IsBusy)
-				return;
+        private Command getLocationsCommand;
+        public Command GetLocationsCommand
+        {
+            get
+            {
+                return getLocationsCommand ??
+                    (getLocationsCommand = new Command(async () => await ExecuteGetLocationsCommand(), () => { return !IsBusy; }));
+            }
+        }
 
-			if (ForceSync)
-				Settings.LastSync = DateTime.Now.AddDays (-30);
+        private async Task ExecuteGetLocationsCommand()
+        {
+            if (IsBusy)
+                return;
 
-			IsBusy = true;
-			GetLocationsCommand.ChangeCanExecute ();
-			try{
-				Locations.Clear();
+            if (ForceSync)
+                Settings.LastSync = DateTime.Now.AddDays(-30);
+
+            IsBusy = true;
+            GetLocationsCommand.ChangeCanExecute();
+            try
+            {
+                Locations.Clear();
 
                 //var stores = new List<Store>();
                 Geocoder geoCoder = new Geocoder();
@@ -94,34 +100,36 @@ namespace OfficeLocator
                 }
 
                 Sort();
-			}
-			catch(Exception ex) {
-				page.DisplayAlert ("Uh Oh :(", "Unable to gather locations.", "OK");
+            }
+            catch (Exception ex)
+            {
+                page.DisplayAlert("Uh Oh :(", "Unable to gather locations.", "OK");
                 Analytics.TrackEvent("Exception", new Dictionary<string, string> {
                     { "Message", ex.Message },
                     { "StackTrace", ex.ToString() }
                 });
-			}
-			finally {
-				IsBusy = false;
-				GetLocationsCommand.ChangeCanExecute ();
-			}
+            }
+            finally
+            {
+                IsBusy = false;
+                GetLocationsCommand.ChangeCanExecute();
+            }
 
-		}
+        }
 
-		private void Sort()
-		{
+        private void Sort()
+        {
 
-			LocationsGrouped.Clear();
-			var sorted = from location in Locations
-				orderby location.Country, location.City 
-				group location by location.Country into locationGroup
-				select new Grouping<string, Location>(locationGroup.Key, locationGroup);
+            LocationsGrouped.Clear();
+            var sorted = from location in Locations
+                         orderby location.Country, location.City
+                         group location by location.Country into locationGroup
+                         select new Grouping<string, Location>(locationGroup.Key, locationGroup);
 
-			foreach(var sort in sorted)
-				LocationsGrouped.Add(sort);
-		}
-	}
+            foreach (var sort in sorted)
+                LocationsGrouped.Add(sort);
+        }
+    }
 
 }
 

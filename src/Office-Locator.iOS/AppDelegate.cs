@@ -9,21 +9,14 @@ using Microsoft.AppCenter.Crashes;
 
 namespace OfficeLocator.iOS
 {
-    [Register (nameof(AppDelegate))]
-	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
-	{
-        string mobileCenterKey = "";
-
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+    [Register(nameof(AppDelegate))]
+    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    {
+        public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-
-            UINavigationBar.Appearance.BarTintColor = UIColor.FromRGB(28, 43, 67); //bar background
-            UINavigationBar.Appearance.TintColor = UIColor.White; //Tint color of button items
-            UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes()
-            {
-                //Font = UIFont.FromName("HelveticaNeue-Light", (nfloat)20f),
-                TextColor = UIColor.White
-            });
+            UINavigationBar.Appearance.BarTintColor = UIColor.FromRGB(28, 43, 67);
+            UINavigationBar.Appearance.TintColor = UIColor.White;
+            UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.White });
             UIApplication.SharedApplication.SetStatusBarStyle(UIStatusBarStyle.LightContent, false);
             UITabBar.Appearance.TintColor = UIColor.FromRGB(54, 82, 113);
 
@@ -31,21 +24,15 @@ namespace OfficeLocator.iOS
 
             Xamarin.FormsMaps.Init();
 
-            if (!string.IsNullOrEmpty(mobileCenterKey))
-            { 
-                AppCenter.Start(mobileCenterKey,
-                       typeof(Analytics), typeof(Crashes));
-            }
-            
-			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
-			SQLitePCL.CurrentPlatform.Init();
-			ImageCircleRenderer.Init();
+            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+            SQLitePCL.CurrentPlatform.Init();
+            ImageCircleRenderer.Init();
 
 
-			LoadApplication (new App ());
+            LoadApplication(new App());
 
-			return base.FinishedLaunching (app, options);
-		}
-	}
+            return base.FinishedLaunching(uiApplication, launchOptions);
+        }
+    }
 }
 

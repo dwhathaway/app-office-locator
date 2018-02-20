@@ -10,29 +10,16 @@ namespace OfficeLocator
 	{
 		public App ()
 		{
-			// The root page of your application
-
-			//Step 1: Add Navigation
 			MainPage = new NavigationPage(new LocationsPage())
 			{
 				BarTextColor = Color.White
 			};
 		}
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
-
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
+        protected override void OnStart()
+        {
+            AppCenterHelpers.Start();
+        }
 	}
 }
 
