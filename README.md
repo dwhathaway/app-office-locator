@@ -31,7 +31,7 @@ Please find links here to hacks that you can do to learn more about Xamarin, Azu
 
 * [Azure Easy Tables Hack](hacks/easy-table-hack.md)
 * [Azure Functions Hack](hacks/functions-hack.md)
-* [Visual Studio Mobile Center Hack](hacks/mobile-center-hack.md)
+* [Visual Studio App Center Hack](hacks/mobile-center-hack.md)
 
 ## License
 The MIT License (MIT)
