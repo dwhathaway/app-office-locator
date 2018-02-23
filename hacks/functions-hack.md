@@ -12,7 +12,7 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 - Browse to [https://portal.azure.com](https://portal.azure.com)
 - New > Function App
 - Give the app a name (this must be unique - don't worry, the portal will tell you if it's not)
-- Select your Azure Subscription 
+- Select your Azure Subscription
 - Choose "Use Existing" for the resource group, and use the same resource group you used for your Mobile App Service in the Easy Table Hack.  
 - Choose "Consumption Plan" for the hosting plan.  This way you will only be charge for the resources your function actually uses.
 - Select your location.
@@ -22,7 +22,6 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 ![Create Function App](img/create-function.png)
 
 ### Step 2: Create your Function
-
 
 - Once again, browse to [https://portal.azure.com](https://portal.azure.com)
 - Click "App Services" from the menu on the left of the page, then select the Function App you just created.
@@ -46,8 +45,7 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 
 - Copy and paste this code into the project.json file and click "Save"
 
-
-```
+```json
 {
   "frameworks": {
     "net46":{
@@ -56,10 +54,10 @@ Complete the [Easy Table Hack](easy-table-hack.md)
       }
     }
   }
-} 
+}
 ```
 
-### Step 4: Set your Fucntion Output
+### Step 4: Set your Function Output
 
 - Click "Integrate" on the left
 - Click `+ New Output`
@@ -86,61 +84,72 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 - Click on "Tumbnail" (your function name) to open the code editor
 - Copy and paste this code into the `run.csx` file (the default file that opens)
 
-```
+```csharp
 #r "Microsoft.WindowsAzure.Storage"
 
-using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
+
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.MobileServices;
 
-public static async Task Run(Stream myBlob, CloudBlockBlob outputBlob,  string name, TraceWriter log)
+const string apiKey = "<insert your cognitive services api key>";
+const string apiUrlBase = "https://api.projectoxford.ai/vision/v1.0/generateThumbnail";
+static readonly HttpClient httpClient = GetHttpClient(apiUrlBase, apiKey);
+
+public static async Task Run(Stream inputStream, CloudBlockBlob outputBlob, string name, TraceWriter log)
 {
     log.Info($" Image Name:  {name}");
-    int width = 320; 
+    int width = 320;
     int height = 320;
-    bool smartCropping = true;
-    string _apiKey = "<insert your cognitive services api key>";
-    string _apiUrlBase = "https://api.projectoxford.ai/vision/v1.0/generateThumbnail";
+    bool isSmartCroppingEnabled = true;
 
-    using (var httpClient = new HttpClient())
+    using (HttpContent content = new StreamContent(inputStream))
     {
-        httpClient.BaseAddress = new Uri(_apiUrlBase);
-        httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _apiKey);
-        using (HttpContent content = new StreamContent(myBlob))
-        {
-            //get response
-            content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
-            var uri = $"{_apiUrlBase}?width={width}&height={height}&smartCropping={smartCropping.ToString()}";
-            var response = httpClient.PostAsync(uri, content).Result;
-            var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+        //get response
+        content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
-            //write to output thumb
-            await outputBlob.UploadFromByteArrayAsync(responseBytes, 0, responseBytes.Length);
-            
-            //save URI to database
-            MobileServiceClient client = new MobileServiceClient("<insert your app service url>");
-            string nameNoExt= System.IO.Path.GetFileNameWithoutExtension(name);
-            var results = await client.GetTable<Location>().Where(x => x.Name==nameNoExt).ToListAsync();
-            
-            Location loc = results.FirstOrDefault(); 
-            log.Info($" Image URI:  {outputBlob.Uri.ToString()}");
-            loc.Image = outputBlob.Uri.ToString();
+        var uri = $"{apiUrlBase}?width={width}&height={height}&smartCropping={isSmartCroppingEnabled.ToString()}";
 
-            await client.GetTable<Location>().UpdateAsync(loc);
-        }
+        var response = await httpClient.PostAsync(uri, content);
+        var responseBytes = await response.Content.ReadAsByteArrayAsync();
+
+        //write to output thumb
+        await outputBlob.UploadFromByteArrayAsync(responseBytes, 0, responseBytes.Length);
+
+        //save URI to database
+        var mobileServiceClient = new MobileServiceClient("<insert your app service url>");
+
+        var nameNoExt = System.IO.Path.GetFileNameWithoutExtension(name);
+        var results = await mobileServiceClient.GetTable<Location>().Where(x => x.Name == nameNoExt).ToListAsync();
+
+        Location loc = results.FirstOrDefault();
+        log.Info($" Image URI:  {outputBlob.Uri.ToString()}");
+        loc.Image = outputBlob.Uri.ToString();
+
+        await mobileServiceClient.GetTable<Location>().UpdateAsync(loc);
     }
 }
 
-public class Location
+static HttpClient GetHttpClient(string baseUrl, string apiKey)
 {
-    public string Id{get;set;}
-    public string Image {get;set;}
+    var httpClient = new HttpClient();
+    httpClient.BaseAddress = new Uri(baseUrl);
+    httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
+
+    return httpClient;
+}
+
+class Location
+{
+    public string Id { get; set; }
+    public string Image { get; set; }
     public string Name { get; set; }
 }
 ```
+
 - Save the file
 
 ### Step 6: Create your Cognitive Service
