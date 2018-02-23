@@ -24,13 +24,17 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 ### Step 2: Create your Function
 
 - Once again, browse to [https://portal.azure.com](https://portal.azure.com)
-- Click "App Services" from the menu on the left of the page, then select the Function App you just created.
-- Click on "Functions"
-- Click the `+ New Function` at the top
-- Scroll down and click BlobTrigger - C#
+- Click "App Services" from the menu on the left of the page
+- Select the Function App you just created.
+- Click on "Functions" from the "Functions App Menu" on the left-hand side
+- Click `+ New Function` at the top
+- Select Custom Function
+- Scroll down and click BlobTrigger
+- Set the "Language" to C#
 - Name your Function "Thumbnail"
 - Enter `locationimages/{name}` for the Path
-- Click "New" next to "Storage account connection" and select the storage account you created in Step 1
+- Click "New" next to "Storage account connection"
+- Select the storage account you created in Step 1
 - Click "Create"
 
 ![New Function](img/new-function.png)
@@ -43,7 +47,8 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 
 ![Add project.json](img/add-project-file.png)
 
-- Copy and paste this code into the project.json file and click "Save"
+- Copy and paste this code into the project.json file 
+- Click "Save"
 
 ```json
 {
@@ -67,7 +72,7 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 ![Blob Output](img/blob-output.png) 
 
 - Enter `thumbnails/{name}` for the "Path"
-- Select your Storage account under "Storage account connection"
+- Under "Storage account connection", select the storage account we created in Step 1
 - Click "Save"
 
 ![Configure Blob Output](img/blob-output-config.png)
@@ -82,7 +87,8 @@ Complete the [Easy Table Hack](easy-table-hack.md)
 ### Step 5: Write your Function Code
 
 - Click on "Tumbnail" (your function name) to open the code editor
-- Copy and paste this code into the `run.csx` file (the default file that opens)
+- Copy / Paste the code below into the `run.csx` file (overwriting the default code that opens)
+- Click Save
 
 ```csharp
 #r "Microsoft.WindowsAzure.Storage"
@@ -98,17 +104,19 @@ using Microsoft.WindowsAzure.MobileServices;
 const string apiKey = "<insert your cognitive services api key>";
 const string apiUrlBase = "https://api.projectoxford.ai/vision/v1.0/generateThumbnail";
 static readonly HttpClient httpClient = GetHttpClient(apiUrlBase, apiKey);
+static readonly MobileServiceClient mobileServiceClient = new MobileServiceClient("<insert your app service url>");
 
-public static async Task Run(Stream inputStream, CloudBlockBlob outputBlob, string name, TraceWriter log)
+public static async Task Run(Stream myBlob, CloudBlockBlob outputBlob, string name, TraceWriter log)
 {
-    log.Info($" Image Name:  {name}");
-    int width = 320;
-    int height = 320;
-    bool isSmartCroppingEnabled = true;
+    log.Info($"Image Name: {name}");
 
-    using (HttpContent content = new StreamContent(inputStream))
+    const int width = 320;
+    const int height = 320;
+    const bool isSmartCroppingEnabled = true;
+
+    using (HttpContent content = new StreamContent(myBlob))
     {
-        //get response
+        log.Info($"Getting Vision API Response");
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
         var uri = $"{apiUrlBase}?width={width}&height={height}&smartCropping={isSmartCroppingEnabled.ToString()}";
@@ -116,17 +124,15 @@ public static async Task Run(Stream inputStream, CloudBlockBlob outputBlob, stri
         var response = await httpClient.PostAsync(uri, content);
         var responseBytes = await response.Content.ReadAsByteArrayAsync();
 
-        //write to output thumb
+        log.Info($"Uploading Vision API Response to Blob Storage");
         await outputBlob.UploadFromByteArrayAsync(responseBytes, 0, responseBytes.Length);
 
-        //save URI to database
-        var mobileServiceClient = new MobileServiceClient("<insert your app service url>");
-
+        log.Info($"Updating ImageUrl in Mobile App Service Database to point to Azure Blob Storage");
         var nameNoExt = System.IO.Path.GetFileNameWithoutExtension(name);
-        var results = await mobileServiceClient.GetTable<Location>().Where(x => x.Name == nameNoExt).ToListAsync();
+        var results = await mobileServiceClient.GetTable<Location>().Where(x => x.Name.ToUpper() == nameNoExt.ToUpper()).ToListAsync();
 
         Location loc = results.FirstOrDefault();
-        log.Info($" Image URI:  {outputBlob.Uri.ToString()}");
+        log.Info($" Image URI: {outputBlob.Uri.ToString()}");
         loc.Image = outputBlob.Uri.ToString();
 
         await mobileServiceClient.GetTable<Location>().UpdateAsync(loc);
@@ -149,8 +155,6 @@ class Location
     public string Name { get; set; }
 }
 ```
-
-- Save the file
 
 ### Step 6: Create your Cognitive Service
 
@@ -175,7 +179,7 @@ class Location
 - Click on Thumbnail (the name of your function)
 - Replace `<insert your cognitive services api key>` on line 16 with your copied API key
 - Save the file
-- Navigate to the Mobile App Service you created in the Easy Table Hack
+- Navigate to the Mobile App Service we created in the Easy Table Hack
 - Copy the URL as shown
 
 ![App Service URL](img/mobile-service-url.png)
@@ -186,22 +190,24 @@ class Location
 ### Step 8: Test your Function
 
 - Click on "Resource Groups" on the left
-- Select your resource group
-- Select the Storage Accout you created with your Function
+- Select the Resource Group we created in the [Easy Table Hack](easy-table-hack.md)
+- Select the Storage Account we created with our Function
 - Click "Blobs"
 - Click `+ Container`
 - Enter `locationimages` for the name
-- Change the "Public access level" to "Containter"
+- Change the "Public access level" to "Container"
 - Click "Ok"
 
 ![Add Container](img/add-container.png)
 
 - Click "locationimages" to open the container (folder) you just created
 - Click "Upload"
-- Upload an image with a name that matches the name of one of your locations (must match exactly)
+- Upload an image with a filename that matches the name of one of your locations
+  - **Note**: the filename must match the location name exactly.
+  - If you used `data/Location.csv` for your table, you can upload `data/Xamarin HQ.png` to BLob Storage
 - In just a few seconds a new folder named "thumbnails" will be created and contain your resized image.
 - Try running the Office Locator app again and see if the new image appears.
 
-# Congratulations!
+## Congratulations!
 
 You've complete this hack!  Why don't you try your hand at the [Visual Studio Mobile Center](mobile-center-hack.md) hack now?
