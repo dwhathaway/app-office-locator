@@ -32,7 +32,12 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 
 - Browse to [https://portal.azure.com](https://portal.azure.com)
 - New > Mobile App
-- Give the app a name (this must be unique - don't worry, the portal will tell you if it's not), select your Azure Subscription, choose "Create new" for the resource group, and copy the same value you used for your app name into the Resource Group Name field (we'll create all of our resources under this same Resource Group).
+- Give the app a name
+  - This must be unique, but don't worry, the portal will tell you if it's not
+- Select your Azure Subscription
+- Choose "Create new" for the resource group
+- Copy the same value we used for our app name into the Resource Group Name field
+  - Note: We'll be creating all of our resources under this same Resource Group
 - Click "Create"
 
 ![Create Mobile App](img/create-app-service.png)
@@ -88,14 +93,24 @@ You've already set up your data connection, so all you need to do is check the c
 
 This will take a minute or two to complete.  Once it's done, you'll be returned back to the Easy Tables blade, where you can set up your Location and Feedback tables
 
-### Step 8: Upload the CSV file to populate locations
+### Step 8: Upload the CSV files to Easy Tables
 
 - On the Easy Tables blade, click the "Add from CSV" button
-- Browse Click the "Select a file" field, and browse to the `my-office-locator.csv` file in the `data` folder of the repo that you cloned in __Step 1__
-- Change the "Name" field to "Location", and leave all the rest of the fields as they are
+- Click "Select a file"
+- Select `Location.csv` from the `data` folder of the repo that you cloned in __Step 1__
+- Ensure the "Name" is "Location", and leave all the rest of the fields as they are
 - Scroll to the bottom, and click the white square with the blue border (yes, that's a button)
 
 ![Save 'Location' Table](img/save-location-table.png)
+
+- On the Easy Tables blade, click the "Add from CSV" button
+- Click "Select a file"
+- Select `Feedback.csv` from the `data` folder of the repo that you cloned in __Step 1__
+- Ensure the "Name" is "Feedback", and leave all the rest of the fields as they are
+- Scroll to the bottom, and click the white square with the blue border (yes, that's a button)
+
+
+![Save 'Location' Table](img/save-feedback-table.png)
 
 This will initialize a new table, and populate it with the locations that you uploaded. Scroll to the top of the page, and look for the "Successfully imported!" message, then click the "X" to close out the blade.
 
@@ -103,8 +118,8 @@ Next, we'll change the code in the app to pull from your App Service.
 
 ### Step 9: Run the app
 
-- Open the `Office-Locator` project, and browse to the `Services` folder, and open `AzureDataStore.cs` file.
-- Delete the `#error` pragma on Line #38
+- Open the `Office-Locator` project, and open [`Constants/AzureConstants.cs`](https://github.com/brminnick/app-office-locator/blob/master/src/Office-Locator/Constants/AzureConstants.cs)
+- Delete the entire [Line #5](https://github.com/brminnick/app-office-locator/blob/master/src/Office-Locator/Constants/AzureConstants.cs#L5), which contains `#error Missing Azure Endpoint URL`
 - Browse to your app in the Azure Portal, and copy the URL form the Overview page.  To do so, click the "Overview" blade, and then hover over the URL to show the 'page' icon.  Click on that icon to copy your URL
 
 ![Copy endpoint URL](img/copy-endpoint-url.png)
