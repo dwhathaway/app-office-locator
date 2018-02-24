@@ -129,13 +129,15 @@ public static async Task Run(Stream myBlob, CloudBlockBlob outputBlob, string na
 
         log.Info($"Updating ImageUrl in Mobile App Service Database to point to Azure Blob Storage");
         var nameNoExt = System.IO.Path.GetFileNameWithoutExtension(name);
-        var results = await mobileServiceClient.GetTable<Location>().Where(x => x.Name.ToUpper() == nameNoExt.ToUpper()).ToListAsync();
+        var locationResultsFromAzureDatabase = await mobileServiceClient.GetTable<Location>().Where(x => x.Name.ToUpper().Equals(nameNoExt.ToUpper())).ToListAsync();
 
-        Location loc = results.FirstOrDefault();
+        log.Info($"Number of results: {locationResultsFromAzureDatabase?.Count ?? 0}");
+
+        var location = locationResultsFromAzureDatabase.FirstOrDefault();
         log.Info($" Image URI: {outputBlob.Uri.ToString()}");
-        loc.Image = outputBlob.Uri.ToString();
+        location.Image = outputBlob.Uri.ToString();
 
-        await mobileServiceClient.GetTable<Location>().UpdateAsync(loc);
+        await mobileServiceClient.GetTable<Location>().UpdateAsync(location);
     }
 }
 

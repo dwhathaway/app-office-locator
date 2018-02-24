@@ -50,7 +50,7 @@ Make a local directory, and then clone the repo from [https://github.com/dwhatha
 - Click "SQL Databases" from the menu on the left of the page, then click the "+ Add" button
 - Enter in a name for the database (e.g. `my-office-locator`)
 - Choose your Azure Subscription
-- Choose "Use existing", and select the `my-office-locator` resource group you created in the previous section
+- Choose "Use existing", and select the `my-office-locator` Resource Group you created in the previous section
 - Choose "Blank database"
 - Click on "Server", and click "Create a new server"
 - Enter a name for your server
