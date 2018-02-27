@@ -26,7 +26,7 @@ namespace OfficeLocator
             Title = "Locations";
             dataStore = AzureDataStore.Instance;
             Locations = new ObservableCollection<Location>();
-            LocationsGrouped = new ObservableCollection<Grouping<string, Location>>();
+            GroupedLocationCollection = new ObservableCollection<Grouping<string, Location>>();
         }
 
         public Command LocationListRefreshCommand
@@ -40,8 +40,8 @@ namespace OfficeLocator
             set { SetProperty(ref isRefreshing, value); }
         }
 
-        public ObservableCollection<Location> Locations { get; set; }
-        public ObservableCollection<Grouping<string, Location>> LocationsGrouped { get; set; }
+        public ObservableCollection<Location> Locations { get; }
+        public ObservableCollection<Grouping<string, Location>> GroupedLocationCollection { get; set; }
         public bool ForceSync { get; set; }
 
         public async Task DeleteLocation(Location location)
@@ -54,7 +54,7 @@ namespace OfficeLocator
             {
                 await dataStore.RemoveLocationAsync(location).ConfigureAwait(false);
                 Locations.Remove(location);
-                Sort();
+                UpdateGroupedLocationCollection();
             }
             catch (Exception ex)
             {
@@ -83,11 +83,13 @@ namespace OfficeLocator
 
             try
             {
-                Locations.Clear();
-
-                Geocoder geoCoder = new Geocoder();
+                var geoCoder = new Geocoder();
 
                 var locations = await dataStore.GetLocationsAsync().ConfigureAwait(false);
+
+                if(locations.Any())
+                    Locations.Clear();
+
                 foreach (var location in locations)
                 {
                     if (string.IsNullOrWhiteSpace(location.Image))
@@ -95,19 +97,19 @@ namespace OfficeLocator
 
                     if (location.Latitude == 0 && location.Longitude == 0)
                     {
-                        var address = location.StreetAddress + ", " + location.City +
-                        ", " + location.State + ", " + location.ZipCode;
-                        var approximateLocations = await geoCoder.GetPositionsForAddressAsync(address).ConfigureAwait(false);
+                        var address = location.StreetAddress + ", " + location.City + ", " + location.State + ", " + location.ZipCode;
+                        var approximateAddressLocations = await geoCoder.GetPositionsForAddressAsync(address).ConfigureAwait(false);
 
-                        Position pos = approximateLocations.FirstOrDefault();
-                        location.Latitude = pos.Latitude;
-                        location.Longitude = pos.Longitude;
+                        var addressLocation = approximateAddressLocations.FirstOrDefault();
+
+                        location.Latitude = addressLocation.Latitude;
+                        location.Longitude = addressLocation.Longitude;
                     }
 
                     Locations.Add(location);
                 }
 
-                Sort();
+                UpdateGroupedLocationCollection();
             }
             catch (Exception ex)
             {
@@ -124,17 +126,17 @@ namespace OfficeLocator
             }
         }
 
-        void Sort()
+        void UpdateGroupedLocationCollection()
         {
-            LocationsGrouped.Clear();
+            GroupedLocationCollection.Clear();
 
-            var sorted = from location in Locations
-                         orderby location.Country, location.City
-                         group location by location.Country into locationGroup
-                         select new Grouping<string, Location>(locationGroup.Key, locationGroup);
+            var locationGroupingList = from location in Locations
+                                       orderby location.Country, location.City
+                                       group location by location.Country into locationGroup
+                                       select new Grouping<string, Location>(locationGroup.Key, locationGroup);
 
-            foreach (var sort in sorted)
-                LocationsGrouped.Add(sort);
+            foreach (var locationGrouping in locationGroupingList)
+                GroupedLocationCollection.Add(locationGrouping);
         }
     }
 }
