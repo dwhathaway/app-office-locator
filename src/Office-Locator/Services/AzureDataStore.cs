@@ -138,11 +138,7 @@ namespace OfficeLocator
             }
             catch (Exception ex)
             {
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
-                Debug.WriteLine("Sync Failed:" + ex.Message);
+                AppCenterHelpers.LogException(ex);
             }
         }
 
@@ -160,11 +156,7 @@ namespace OfficeLocator
             }
             catch (Exception ex)
             {
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
-                Debug.WriteLine("Sync Failed:" + ex.Message);
+                AppCenterHelpers.LogException(ex);
             }
         }
     }

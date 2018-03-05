@@ -129,10 +129,7 @@ namespace OfficeLocator
             catch (Exception ex)
             {
                 OnErrorOcurred("Unable to save feedback, please try again");
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
+                AppCenterHelpers.LogException(ex);
             }
             finally
             {

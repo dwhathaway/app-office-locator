@@ -23,11 +23,6 @@
     <Folder Include="Constants\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Push" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AppCenter" Version="1.4.0" />
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
@@ -43,5 +38,10 @@
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
     <PackageReference Include="Xamarin.Forms.Maps" Version="2.5.0.280555" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Push" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AppCenter" Version="1.5.0" />
   </ItemGroup>
 </Project>

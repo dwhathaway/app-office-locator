@@ -60,10 +60,7 @@ namespace OfficeLocator
             {
                 OnErrorOcurred("Unable to remove location, please try again");
 
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
+                AppCenterHelpers.LogException(ex);
             }
             finally
             {
@@ -115,10 +112,7 @@ namespace OfficeLocator
             {
                 OnErrorOcurred("Unable to gather locations");
 
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
+                AppCenterHelpers.LogException(ex);
             }
             finally
             {

@@ -42,13 +42,15 @@ namespace OfficeLocator
             TrackEvent(trackIdentifier, table);
         }
 
-        public static void LogException(Exception exception)
+        public static void LogException(Exception exception, IDictionary<string, string> properties = null)
         {
             var exceptionType = exception.GetType().ToString();
             var message = exception.Message;
 
             System.Diagnostics.Debug.WriteLine(exceptionType);
             System.Diagnostics.Debug.WriteLine($"Error: {message}");
+
+            Crashes.TrackError(exception, properties);
         }
 
         static void Start(string appSecret)
