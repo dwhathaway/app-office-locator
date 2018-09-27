@@ -5,7 +5,7 @@ using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace OfficeLocator
 {
-    public partial class App : Application
+    public partial class App : Xamarin.Forms.Application
     {
         public App()
         {
