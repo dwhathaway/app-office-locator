@@ -12,8 +12,10 @@ using OfficeLocator.Helpers;
 using OfficeLocator.Authentication;
 using OfficeLocator.Models;
 using System.IO;
-using Plugin.Connectivity;
+using Xamarin.Essentials;
 using OfficeLocator.Services;
+using Location = OfficeLocator.Models.Location;
+using Microsoft.AppCenter.Crashes;
 
 [assembly: Dependency(typeof(AzureService))]
 namespace OfficeLocator.Services
@@ -75,7 +77,8 @@ namespace OfficeLocator.Services
         {
             try
             {
-                if (!CrossConnectivity.Current.IsConnected)
+                var current = Connectivity.NetworkAccess;
+                if (!(current == NetworkAccess.Internet))
                     return;
 
                 await locationsTable.PullAsync("allLocations", locationsTable.CreateQuery());
@@ -84,7 +87,7 @@ namespace OfficeLocator.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Unable to sync locations, that is alright as we have offline capabilities: " + ex);
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "AzureService", "Unable to sync locations, that is alright as we have offline capabilities" } });
             }
 
         }
@@ -93,7 +96,8 @@ namespace OfficeLocator.Services
         {
             try
             {
-                if (!CrossConnectivity.Current.IsConnected)
+                var current = Connectivity.NetworkAccess;
+                if (!(current == NetworkAccess.Internet))
                     return;
 
                 await feedbackTable.PullAsync("allFeedback", feedbackTable.CreateQuery());
@@ -102,7 +106,7 @@ namespace OfficeLocator.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Unable to sync feedback, that is alright as we have offline capabilities: " + ex);
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "AzureService", "Unable to sync feedback, that is alright as we have offline capabilities" } });
             }
 
         }

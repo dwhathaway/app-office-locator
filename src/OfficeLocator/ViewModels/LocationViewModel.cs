@@ -2,8 +2,9 @@
 using MvvmHelpers;
 using OfficeLocator.Models;
 using Xamarin.Forms;
-using Plugin.Messaging;
-using Plugin.ExternalMaps;
+using Xamarin.Essentials;
+using Location = OfficeLocator.Models.Location;
+using Microsoft.AppCenter.Crashes;
 
 namespace OfficeLocator.ViewModels
 {
@@ -35,8 +36,9 @@ namespace OfficeLocator.ViewModels
         {
             get
             {
-                return navigateCommand ?? (navigateCommand = new Command(() =>
-                CrossExternalMaps.Current.NavigateTo(Office.Name, Office.Latitude, Office.Longitude)));
+                Xamarin.Essentials.Location location = new Xamarin.Essentials.Location(Office.Latitude, Office.Longitude);
+                var options = new MapsLaunchOptions { Name = Office.Name };
+                return navigateCommand ?? (navigateCommand = new Command(() => Maps.OpenAsync(location, options).RunSynchronously()));
             }
         }
 
@@ -46,20 +48,27 @@ namespace OfficeLocator.ViewModels
             get
             {
                 return callCommand ?? (callCommand = new Command(async () => {
-                    var phoneCallTask = CrossMessaging.Current.PhoneDialer;
-                    if (phoneCallTask.CanMakePhoneCall)
+
+                    if (!string.IsNullOrEmpty(Office.PhoneNumber))
                     {
-                        if (!string.IsNullOrEmpty(Office.PhoneNumber))
+                        if (await _page.DisplayAlert("Call?", "Call " + Office.PhoneNumber + "?", "Call", "Cancel"))
                         {
-                            if (await _page.DisplayAlert("Call?", "Call " + Office.PhoneNumber + "?", "Call", "Cancel"))
+                            try
                             {
-                                phoneCallTask.MakePhoneCall(Office.PhoneNumber);
+                                PhoneDialer.Open(Office.PhoneNumber);
+                            }
+                            catch (FeatureNotSupportedException ex)
+                            {
+                                Crashes.TrackError(ex);
+                            }
+                            catch (Exception ex)
+                            {
+                                Crashes.TrackError(ex);
                             }
                         }
                     }
                 }));
             }
         }
-
     }
 }

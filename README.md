@@ -15,13 +15,10 @@ The Office Locator application enables you as a service provider to easily conne
 Built in C# and powered by ([Xamarin](http://www.xamarin.com)) from inside of Visual Studio and Xamarin Studio. In addition there was a plethora of amazing NuGet packages and that helped in the creation of this application. Please refer to to each NuGet packages license for the latest.
 
 * [Xamarin.Forms](https://www.nuget.org/packages/Xamarin.Forms/)
+* [Xamarin.Essentials](https://docs.microsoft.com/en-us/xamarin/essentials/)
 * [Azure Mobile Apps](https://www.nuget.org/packages/Microsoft.Azure.Mobile.Client/)
 * [Visual Studio App Center](https://www.nuget.org/packages/Microsoft.AppCenter/)
 * [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json)
-* [Connectivity Plugin](https://www.nuget.org/packages/Xam.Plugin.Connectivity/)
-* [External Maps Plugin](https://www.nuget.org/packages/Xam.Plugin.ExternalMaps/)
-* [Messaging Plugin](https://www.nuget.org/packages/Xam.Plugins.Messaging/)
-* [Settings Plugin](https://www.nuget.org/packages/Xam.Plugins.Settings/)
 * [MvvmHelpers](https://www.nuget.org/packages/Refractored.MvvmHelpers/)
 * [FFImageLoading](https://www.nuget.org/packages/Xamarin.FFImageLoading/)
 
@@ -32,6 +29,8 @@ Please find links here to hacks that you can do to learn more about Xamarin, Azu
 * [Azure Easy Tables Hack](hacks/easy-table-hack.md)
 * [Azure Functions Hack](hacks/functions-hack.md)
 * [Visual Studio App Center Hack](hacks/mobile-center-hack.md)
+
+Icons made with resources by [Freepik](http://www.freepik.com) and [SimpleIcon](https://www.flaticon.com/authors/simpleicon) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
 ## License
 The MIT License (MIT)

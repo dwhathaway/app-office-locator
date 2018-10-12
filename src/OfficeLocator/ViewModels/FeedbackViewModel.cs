@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using MvvmHelpers;
 using OfficeLocator.Models;
 using OfficeLocator.Services;
@@ -23,30 +24,6 @@ namespace OfficeLocator.ViewModels
             LocationName = location.Name;
             _page = page;
         }
-
-        //public async Task<IEnumerable<Location>> GetLocationAsync()
-        //{
-        //  if (IsBusy)
-        //      return new List<Location>();
-
-        //  IsBusy = true;
-        //  IEnumerable<Location> locations = null;
-        //  try{
-
-
-        //      return await dataStore.GetLocationsAsync ();
-
-        //  }catch(Exception ex) {
-        //      page.DisplayAlert ("Uh Oh :(", "Unable to gather locations.", "OK");
-        //      Xamarin.Insights.Report (ex);
-        //  }
-        //  finally {
-        //      IsBusy = false;
-        //  }
-
-        //  return new List<Location> ();
-
-        //}
 
         Command saveFeedbackCommand;
         public Command SaveFeedbackCommand
@@ -89,11 +66,8 @@ namespace OfficeLocator.ViewModels
             }
             catch (Exception ex)
             {
-                _page.DisplayAlert("Uh Oh :(", "Unable to save feedback, please try again.", "OK");
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "FeedbackViewModel", "Unable to save feedback, please try again" } });
+                await _page.DisplayAlert("Uh Oh :(", "Unable to save feedback, please try again.", "OK");
             }
             finally
             {

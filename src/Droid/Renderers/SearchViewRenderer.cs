@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Android.Content;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using OfficeLocator.Droid.Renderers;
 
@@ -7,6 +8,11 @@ namespace OfficeLocator.Droid.Renderers
 {
     public class SearchViewRenderer : SearchBarRenderer
     {
+        public SearchViewRenderer(Context context) : base(context)
+        {
+
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
         {
             base.OnElementChanged(e);

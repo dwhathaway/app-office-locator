@@ -11,7 +11,9 @@ using System.Linq;
 using OfficeLocator.Helpers;
 using OfficeLocator.Services;
 using Xamarin.Forms.Maps;
-using Plugin.Connectivity;
+using Xamarin.Essentials;
+using Location = OfficeLocator.Models.Location;
+using Microsoft.AppCenter.Crashes;
 
 namespace OfficeLocator.ViewModels
 {
@@ -37,28 +39,6 @@ namespace OfficeLocator.ViewModels
             LocationsGrouped = new ObservableCollection<Grouping<string, Location>> ();
             _page = page;
         }
-
-        //public async Task DeleteLocation(Location location)
-        //{
-        //    if (IsBusy)
-        //        return;
-        //    IsBusy = true;
-        //    try {
-        //        await azureService.RemoveLocationAsync(location);
-        //        Locations.Remove(location);
-        //        Sort();
-        //    } catch(Exception ex) {
-        //        _page.DisplayAlert ("Uh Oh :(", "Unable to remove location, please try again", "OK");
-        //        Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-        //            { "Message", ex.Message },
-        //            { "StackTrace", ex.ToString() }
-        //        });
-        //    }
-        //    finally {
-        //        IsBusy = false;
-                
-        //    }
-        //}
 
         private Command getLocationsCommand;
         public Command GetLocationsCommand
@@ -92,7 +72,8 @@ namespace OfficeLocator.ViewModels
                         location.Image = "http://refractored.com/images/wc_small.jpg";
 
                     //added by aditmer on 2/14/18 because GeoCoding fails when offline
-                    if(CrossConnectivity.Current.IsConnected)
+                    var current = Connectivity.NetworkAccess;
+                    if (!(current == NetworkAccess.Internet))
                     {
                         //geocode the street address if the data doesn't contain coordinates
                         if (location.Latitude == 0 && location.Longitude == 0)
@@ -112,12 +93,10 @@ namespace OfficeLocator.ViewModels
 
                 Sort();
             }
-            catch(Exception ex) {
-                _page.DisplayAlert ("Uh Oh :(", "Unable to gather locations.", "OK");
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "LocationsViewModel", "Unable to gather locations" } });
+                await _page.DisplayAlert ("Uh Oh :(", "Unable to gather locations.", "OK");
             }
             finally {
                 IsBusy = false;

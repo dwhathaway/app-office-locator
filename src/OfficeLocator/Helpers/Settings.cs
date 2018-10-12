@@ -1,8 +1,7 @@
 ﻿// Helpers/Settings.cs
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
 using System;
 using OfficeLocator.Services;
+using Xamarin.Essentials;
 
 namespace OfficeLocator.Helpers
 {
@@ -13,13 +12,13 @@ namespace OfficeLocator.Helpers
     /// </summary>
     public static class Settings
     {
-        private static ISettings AppSettings
-        {
-            get
-            {
-                return CrossSettings.Current;
-            }
-        }
+        //private static ISettings AppSettings
+        //{
+        //    get
+        //    {
+        //        return CrossSettings.Current;
+        //    }
+        //}
 
         #region Setting Constants
 
@@ -49,11 +48,11 @@ namespace OfficeLocator.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault(AuthTokenKey, AuthTokenDefault);
+                return Preferences.Get(AuthTokenKey, AuthTokenDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(AuthTokenKey, value);
+                Preferences.Set(AuthTokenKey, value);
             }
         }
 
@@ -61,11 +60,11 @@ namespace OfficeLocator.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault(UserIdKey, UserIdDefault);
+                return Preferences.Get(UserIdKey, UserIdDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(UserIdKey, value);
+                Preferences.Set(UserIdKey, value);
             }
         }
 

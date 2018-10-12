@@ -13,6 +13,7 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using OfficeLocator.Helpers;
 using OfficeLocator.Services;
+using Microsoft.AppCenter.Crashes;
 
 namespace OfficeLocator.Authentication
 {
@@ -59,9 +60,9 @@ namespace OfficeLocator.Authentication
                         gotNewToken = await service.LoginAsync();
                     }
                 }
-                catch (System.Exception e)
+                catch (System.Exception ex)
                 {
-                    Debug.WriteLine("Unable to refresh token: " + e);
+                    Crashes.TrackError(ex, new Dictionary<string, string> { { "AuthHandler", "Unable to refresh token" } });
                 }
                 finally
                 {
@@ -99,22 +100,18 @@ namespace OfficeLocator.Authentication
 
         private async Task<bool> RefreshToken(IMobileServiceClient client)
         {
-
-
             try
             {
-                //await client.RefreshUserAsync();
+                await client.RefreshUserAsync();
                 return true;
             }
-            catch (System.Exception e)
+            catch (System.Exception ex)
             {
-                Debug.WriteLine("Unable to refresh user: " + e);
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "AuthHandler", "Unable to refresh user" } });
             }
 
             return false;
         }
-
-
 
         private async Task<HttpRequestMessage> CloneRequest(HttpRequestMessage request)
         {

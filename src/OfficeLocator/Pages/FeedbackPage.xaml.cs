@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using OfficeLocator.Models;
 using OfficeLocator.ViewModels;
 using Xamarin.Forms;
@@ -30,21 +31,6 @@ namespace OfficeLocator.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            try
-            {
-                //var locations = await viewModel.GetLocationAsync();
-                //              foreach(var store in stores)
-                //                  PickerStore.Items.Add(store.Name);
-            }
-            catch (Exception ex)
-            {
-                Analytics.TrackEvent("Exception", new Dictionary<string, string> {
-                    { "Message", ex.Message },
-                    { "StackTrace", ex.ToString() }
-                });
-                DisplayAlert("Uh oh :(", "Unable to get locations, don't worry you can still submit feedback.", "OK");
-            }
         }
     }
 }
